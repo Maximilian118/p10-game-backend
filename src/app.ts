@@ -1,8 +1,7 @@
 import express from "express"
 import errorHandler from "./middleware/errorHandler"
 import corsHandler from "./middleware/corsHandler"
-import { createHandler } from "graphql-http"
-
+import { graphqlHTTP } from "express-graphql"
 import mongoose from "mongoose"
 
 // Import Graphql Schema and Resolvers.
@@ -25,9 +24,10 @@ app.use(corsHandler)
 // Initialise Graphql with the /graphql endpoint.
 app.use(
   "/graphql",
-  createHandler({
+  graphqlHTTP({
     schema: Schema,
     rootValue: Resolvers,
+    graphiql: true,
   }),
 )
 

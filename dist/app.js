@@ -6,16 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
 const corsHandler_1 = __importDefault(require("./middleware/corsHandler"));
-const graphql_http_1 = require("graphql-http");
+const express_graphql_1 = require("express-graphql");
 const mongoose_1 = __importDefault(require("mongoose"));
 const schemas_1 = __importDefault(require("./graphql/schemas/schemas"));
 const resolvers_1 = __importDefault(require("./graphql/resolvers/resolvers"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: "1mb" }));
 app.use(corsHandler_1.default);
-app.use("/graphql", (0, graphql_http_1.createHandler)({
+app.use("/graphql", (0, express_graphql_1.graphqlHTTP)({
     schema: schemas_1.default,
     rootValue: resolvers_1.default,
+    graphiql: true,
 }));
 app.use(errorHandler_1.default);
 mongoose_1.default
