@@ -38,16 +38,40 @@ const comparePass = (pass, hashedPass) => __awaiter(void 0, void 0, void 0, func
     return yield (0, bcryptjs_1.compare)(pass, hashedPass);
 });
 exports.comparePass = comparePass;
+const isJSON = (str) => {
+    if (typeof str !== "string")
+        return false;
+    try {
+        const result = JSON.parse(str);
+        const type = Object.prototype.toString.call(result);
+        return type === "[object Object]" || type === "[object Array]";
+    }
+    catch (err) {
+        return false;
+    }
+};
 const formatErrHandler = (error) => {
-    const err = JSON.parse(error.message);
-    return {
-        type: err.type,
-        message: err.message,
-        code: err.code ? err.code : 500,
-        value: err.value ? err.value : null,
-        locations: error.locations ? error.locations : [],
-        path: error.path ? error.path : [],
-    };
+    if (isJSON(error.message)) {
+        const err = JSON.parse(error.message);
+        return {
+            type: err.type ? err.type : "",
+            message: err.message ? err.message : "",
+            code: err.code ? err.code : 400,
+            value: err.value ? err.value : null,
+            locations: error.locations ? error.locations : [],
+            path: error.path ? error.path : [],
+        };
+    }
+    else {
+        return {
+            type: "Unknown",
+            message: error.message ? error.message : "",
+            code: 400,
+            value: null,
+            locations: error.locations ? error.locations : [],
+            path: error.path ? error.path : [],
+        };
+    }
 };
 exports.formatErrHandler = formatErrHandler;
 //# sourceMappingURL=utility.js.map

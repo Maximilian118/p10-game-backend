@@ -42,10 +42,21 @@ export const comparePass = async (
   return await compare(pass, hashedPass)
 }
 
+// Check if a string has proper JSON interchange format.
+const isJSON = (str: string) => {
+  if (typeof str !== "string") return false
+  try {
+    const result = JSON.parse(str)
+    const type = Object.prototype.toString.call(result)
+    return type === "[object Object]" || type === "[object Array]"
+  } catch (err) {
+    return false
+  }
+}
+
 // Receives error string, parses it, then returns a formatted error.
-export const formatErrHandler = (
-  error: GraphQLError,
-): {
+// prettier-ignore
+export const formatErrHandler = ( error: GraphQLError ): {
   type: string
   message: string
   code: number
@@ -53,14 +64,25 @@ export const formatErrHandler = (
   locations: readonly SourceLocation[]
   path: readonly (string | number)[]
 } => {
-  const err = JSON.parse(error.message)
+  if (isJSON(error.message)) {
+    const err = JSON.parse(error.message)
 
-  return {
-    type: err.type,
-    message: err.message,
-    code: err.code ? err.code : 500,
-    value: err.value ? err.value : null,
-    locations: error.locations ? error.locations : [],
-    path: error.path ? error.path : [],
+    return {
+      type: err.type ? err.type : "",
+      message: err.message ? err.message : "",
+      code: err.code ? err.code : 400,
+      value: err.value ? err.value : null,
+      locations: error.locations ? error.locations : [],
+      path: error.path ? error.path : [],
+    }
+  } else {
+    return {
+      type: "Unknown",
+      message: error.message ? error.message : "",
+      code: 400,
+      value: null,
+      locations: error.locations ? error.locations : [],
+      path: error.path ? error.path : [],
+    }
   }
 }

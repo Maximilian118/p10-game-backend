@@ -2,11 +2,11 @@ import express from "express"
 import corsHandler from "./middleware/corsHandler"
 import { graphqlHTTP } from "express-graphql"
 import mongoose from "mongoose"
+import { formatErrHandler } from "./shared/utility"
 
 // Import Graphql Schema and Resolvers.
 import Schema from "./graphql/schemas/schemas"
 import Resolvers from "./graphql/resolvers/resolvers"
-import { formatErrHandler } from "./shared/utility"
 
 // Import token authentication middleware.
 // const auth = require("./middleware/auth")
