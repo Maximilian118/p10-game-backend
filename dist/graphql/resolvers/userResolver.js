@@ -24,6 +24,8 @@ const userResolver = {
             yield (0, resolverErrors_1.emailErrors)(email);
             (0, resolverErrors_1.passwordErrors)(password, passConfirm);
             (0, resolverErrors_1.passConfirmErrors)(passConfirm, password);
+            (0, resolverErrors_1.iconErrors)(icon, profile_picture);
+            (0, resolverErrors_1.profilePictureErrors)(profile_picture, icon);
             const user = new user_1.default({
                 name,
                 email,

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = void 0;
+exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
 const throwError = (type, value, message, code) => {
@@ -80,4 +80,38 @@ const passConfirmErrors = (passConfirm, password) => {
     }
 };
 exports.passConfirmErrors = passConfirmErrors;
+const iconErrors = (icon, profile_picture, user) => {
+    const type = "icon";
+    if (icon) {
+        if (!/^[a-z0-9-]+-[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
+            throwError(type, icon, "Icon filename is not valid... Tricky one.");
+        }
+    }
+    if (icon && !profile_picture) {
+        throwError(type, icon, "Got Icon but no Profile Picture?!");
+    }
+    if (icon && user) {
+        if (icon === user.icon) {
+            throwError(type, icon, "Duplicate Icon.");
+        }
+    }
+};
+exports.iconErrors = iconErrors;
+const profilePictureErrors = (profile_picture, icon, user) => {
+    const type = "profile_picture";
+    if (profile_picture) {
+        if (!/^[a-z0-9-]+-[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture)) {
+            throwError(type, profile_picture, "Profile Picture filename is not valid... Tricky one.");
+        }
+    }
+    if (profile_picture && !icon) {
+        throwError(type, icon, "Got Profile Picture but no Icon?!");
+    }
+    if (profile_picture && user) {
+        if (profile_picture === user.profile_picture) {
+            throwError(type, profile_picture, "Duplicate Profile Picture.");
+        }
+    }
+};
+exports.profilePictureErrors = profilePictureErrors;
 //# sourceMappingURL=resolverErrors.js.map

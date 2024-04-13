@@ -1,5 +1,5 @@
 import { GraphQLError } from "graphql"
-import User from "../../models/user"
+import User, { userType } from "../../models/user"
 
 const throwError = (
   type: string,
@@ -94,5 +94,63 @@ export const passConfirmErrors = (
 
   if (passConfirm !== password) {
     throwError(type, password, "Passwords do not match.")
+  }
+}
+
+export const iconErrors = (
+  icon: string | undefined,
+  profile_picture: string | undefined,
+  user?: userType,
+): void => {
+  const type = "icon"
+
+  if (icon) {
+    if (
+      !/^[a-z0-9-]+-[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)
+    ) {
+      throwError(type, icon, "Icon filename is not valid... Tricky one.")
+    }
+  }
+
+  if (icon && !profile_picture) {
+    throwError(type, icon, "Got Icon but no Profile Picture?!")
+  }
+
+  if (icon && user) {
+    if (icon === user.icon) {
+      throwError(type, icon, "Duplicate Icon.")
+    }
+  }
+}
+
+export const profilePictureErrors = (
+  profile_picture: string | undefined,
+  icon: string | undefined,
+  user?: userType,
+): void => {
+  const type = "profile_picture"
+
+  if (profile_picture) {
+    if (
+      !/^[a-z0-9-]+-[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(
+        profile_picture,
+      )
+    ) {
+      throwError(
+        type,
+        profile_picture,
+        "Profile Picture filename is not valid... Tricky one.",
+      )
+    }
+  }
+
+  if (profile_picture && !icon) {
+    throwError(type, icon, "Got Profile Picture but no Icon?!")
+  }
+
+  if (profile_picture && user) {
+    if (profile_picture === user.profile_picture) {
+      throwError(type, profile_picture, "Duplicate Profile Picture.")
+    }
   }
 }

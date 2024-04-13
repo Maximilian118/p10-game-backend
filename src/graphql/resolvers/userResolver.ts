@@ -4,9 +4,11 @@ import { hashPass, signTokens } from "../../shared/utility"
 
 import {
   emailErrors,
+  iconErrors,
   nameErrors,
   passConfirmErrors,
   passwordErrors,
+  profilePictureErrors,
 } from "./resolverErrors"
 
 const userResolver = {
@@ -15,11 +17,15 @@ const userResolver = {
       const { name, email, password, passConfirm, icon, profile_picture } =
         args.userInput
 
+      // Check for errors.
       nameErrors(name)
       await emailErrors(email)
       passwordErrors(password, passConfirm)
       passConfirmErrors(passConfirm, password)
+      iconErrors(icon, profile_picture)
+      profilePictureErrors(profile_picture, icon)
 
+      // Create a new user DB object.
       const user = new User(
         {
           name,
@@ -36,8 +42,10 @@ const userResolver = {
         },
       )
 
+      // Save the new user to the DB.
       await user.save()
 
+      // Return the new user with tokens.
       return {
         ...user._doc,
         tokens: JSON.stringify(signTokens(user)),
