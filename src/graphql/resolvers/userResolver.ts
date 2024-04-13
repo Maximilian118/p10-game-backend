@@ -6,11 +6,12 @@ import { emailErrors, nameErrors, passwordErrors } from "./resolverErrors"
 const userResolver = {
   createUser: async (args: { userInput: userInputType }): Promise<userType> => {
     try {
-      const { name, email, password, icon, profile_picture } = args.userInput
+      const { name, email, password, passConfirm, icon, profile_picture } =
+        args.userInput
 
       nameErrors(name)
       await emailErrors(email)
-      passwordErrors(password)
+      passwordErrors(password, passConfirm)
 
       const user = new User(
         {

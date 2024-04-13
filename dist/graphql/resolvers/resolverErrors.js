@@ -49,7 +49,7 @@ const emailErrors = (email) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.emailErrors = emailErrors;
-const passwordErrors = (password) => {
+const passwordErrors = (password, passConfirm) => {
     const type = "password";
     if (!password) {
         throwError(type, password, "Please enter a password.");
@@ -63,6 +63,9 @@ const passwordErrors = (password) => {
         }
         if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(password)) {
             throwError(type, password, "At least one letter and one number.");
+        }
+        if (password !== passConfirm) {
+            throwError(type, password, "Passwords do not match.");
         }
     }
 };

@@ -19,10 +19,10 @@ const resolverErrors_1 = require("./resolverErrors");
 const userResolver = {
     createUser: (args) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            const { name, email, password, icon, profile_picture } = args.userInput;
+            const { name, email, password, passConfirm, icon, profile_picture } = args.userInput;
             (0, resolverErrors_1.nameErrors)(name);
             yield (0, resolverErrors_1.emailErrors)(email);
-            (0, resolverErrors_1.passwordErrors)(password);
+            (0, resolverErrors_1.passwordErrors)(password, passConfirm);
             const user = new user_1.default({
                 name,
                 email,

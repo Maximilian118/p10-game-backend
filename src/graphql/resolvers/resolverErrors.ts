@@ -51,7 +51,10 @@ export const emailErrors = async (email: string): Promise<void> => {
   }
 }
 
-export const passwordErrors = (password: string | null): void => {
+export const passwordErrors = (
+  password: string | null,
+  passConfirm: string,
+): void => {
   const type = "password"
 
   if (!password) {
@@ -71,6 +74,10 @@ export const passwordErrors = (password: string | null): void => {
       )
     ) {
       throwError(type, password, "At least one letter and one number.")
+    }
+
+    if (password !== passConfirm) {
+      throwError(type, password, "Passwords do not match.")
     }
   }
 }
