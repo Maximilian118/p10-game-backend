@@ -23,6 +23,7 @@ const userResolver = {
             (0, resolverErrors_1.nameErrors)(name);
             yield (0, resolverErrors_1.emailErrors)(email);
             (0, resolverErrors_1.passwordErrors)(password, passConfirm);
+            (0, resolverErrors_1.passConfirmErrors)(passConfirm, password);
             const user = new user_1.default({
                 name,
                 email,

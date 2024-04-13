@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passwordErrors = exports.emailErrors = exports.nameErrors = void 0;
+exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
 const throwError = (type, value, message, code) => {
@@ -70,4 +70,14 @@ const passwordErrors = (password, passConfirm) => {
     }
 };
 exports.passwordErrors = passwordErrors;
+const passConfirmErrors = (passConfirm, password) => {
+    const type = "passConfirm";
+    if (!passConfirm) {
+        throwError(type, password, "Please enter your password confirmation.");
+    }
+    if (passConfirm !== password) {
+        throwError(type, password, "Passwords do not match.");
+    }
+};
+exports.passConfirmErrors = passConfirmErrors;
 //# sourceMappingURL=resolverErrors.js.map

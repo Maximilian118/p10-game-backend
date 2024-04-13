@@ -81,3 +81,18 @@ export const passwordErrors = (
     }
   }
 }
+
+export const passConfirmErrors = (
+  passConfirm: string,
+  password: string | null,
+): void => {
+  const type = "passConfirm"
+
+  if (!passConfirm) {
+    throwError(type, password, "Please enter your password confirmation.")
+  }
+
+  if (passConfirm !== password) {
+    throwError(type, password, "Passwords do not match.")
+  }
+}
