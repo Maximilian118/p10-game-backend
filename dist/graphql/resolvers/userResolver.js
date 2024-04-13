@@ -15,19 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const moment_1 = __importDefault(require("moment"));
 const user_1 = __importDefault(require("../../models/user"));
 const utility_1 = require("../../shared/utility");
-const graphql_1 = require("graphql");
+const resolverErrors_1 = require("./resolverErrors");
 const userResolver = {
     createUser: (args) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { name, email, password, icon, profile_picture } = args.userInput;
-            if (!name) {
-                throw new graphql_1.GraphQLError((0, utility_1.resolverError)({
-                    type: "name",
-                    message: "Please enter a name",
-                    code: 400,
-                    value: name,
-                }));
-            }
+            (0, resolverErrors_1.nameErrors)(name);
             const user = new user_1.default({
                 name,
                 email,

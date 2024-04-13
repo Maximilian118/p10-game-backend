@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resolverError = exports.formatErrHandler = exports.comparePass = exports.hashPass = exports.signTokens = void 0;
+exports.formatErrHandler = exports.comparePass = exports.hashPass = exports.signTokens = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = require("bcryptjs");
 const signTokens = (user) => {
@@ -50,13 +50,4 @@ const formatErrHandler = (error) => {
     };
 };
 exports.formatErrHandler = formatErrHandler;
-const resolverError = ({ type, message, code, value, }) => {
-    return JSON.stringify({
-        type: type.toLowerCase(),
-        message,
-        code: Number(code),
-        value,
-    });
-};
-exports.resolverError = resolverError;
 //# sourceMappingURL=utility.js.map

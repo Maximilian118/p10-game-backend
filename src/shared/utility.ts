@@ -42,17 +42,14 @@ export const comparePass = async (
   return await compare(pass, hashedPass)
 }
 
-interface errorTypes {
+// Receives error string, parses it, then returns a formatted error.
+export const formatErrHandler = (
+  error: GraphQLError,
+): {
   type: string
   message: string
   code: number
   value: any
-}
-
-// Receives error string, parses it, then returns a formatted error.
-export const formatErrHandler = (
-  error: GraphQLError,
-): errorTypes & {
   locations: readonly SourceLocation[]
   path: readonly (string | number)[]
 } => {
@@ -66,19 +63,4 @@ export const formatErrHandler = (
     locations: error.locations ? error.locations : [],
     path: error.path ? error.path : [],
   }
-}
-
-// Return a new resolver error.
-export const resolverError = ({
-  type,
-  message,
-  code,
-  value,
-}: errorTypes): string => {
-  return JSON.stringify({
-    type: type.toLowerCase(),
-    message,
-    code: Number(code),
-    value,
-  })
 }

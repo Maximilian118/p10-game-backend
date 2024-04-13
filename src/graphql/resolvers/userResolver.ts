@@ -1,23 +1,14 @@
 import moment from "moment"
 import User, { userInputType, userType } from "../../models/user"
-import { hashPass, resolverError, signTokens } from "../../shared/utility"
-import { GraphQLError } from "graphql"
+import { hashPass, signTokens } from "../../shared/utility"
+import { nameErrors } from "./resolverErrors"
 
 const userResolver = {
   createUser: async (args: { userInput: userInputType }): Promise<userType> => {
     try {
       const { name, email, password, icon, profile_picture } = args.userInput
 
-      if (!name) {
-        throw new GraphQLError(
-          resolverError({
-            type: "name",
-            message: "Please enter a name",
-            code: 400,
-            value: name,
-          }),
-        )
-      }
+      nameErrors(name)
 
       const user = new User(
         {
