@@ -11,6 +11,7 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log("error middleware")
   // Default error status code.
   let status = 500
 

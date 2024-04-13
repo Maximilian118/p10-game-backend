@@ -13,6 +13,8 @@ import Resolvers from "./graphql/resolvers/resolvers"
 
 // Initialise express.
 const app = express()
+
+// Maximum request body size.
 app.use(express.json({ limit: "1mb" }))
 
 // Handle CORS Errors.
@@ -21,15 +23,24 @@ app.use(corsHandler)
 // Make token authentication middleware available in all reducers by passing req.
 // app.use(auth)
 
-// Initialise Graphql with the /graphql endpoint.
-app.use(
-  "/graphql",
+app.use("/graphql", (req, res) => {
   graphqlHTTP({
     schema: Schema,
     rootValue: Resolvers,
     graphiql: true,
-  }),
-)
+    customFormatErrorFn(error) {
+      const parsedError = JSON.parse(error.message)
+
+      return {
+        type: parsedError.type,
+        message: parsedError.message,
+        code: parsedError.code ? parsedError.code : null,
+        locations: error.locations,
+        path: error.path,
+      }
+    },
+  })(req, res)
+})
 
 // Error handler middleware.
 app.use(errorHandler)

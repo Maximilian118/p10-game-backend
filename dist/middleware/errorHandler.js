@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const errorHandler = (err, _req, res, next) => {
+    console.log("error middleware");
     let status = 500;
     let message = "Internal Server Error";
     if (err.status) {

@@ -1,24 +1,25 @@
 import mongoose from "mongoose"
 import moment from "moment"
+import { ObjectId } from "mongodb"
 
 export interface userInputType {
   name: string
   email: string
-  password: string
+  password: string | null
   passConfirm: string
   icon?: string
   profile_picture?: string
 }
 
 export interface userType extends userInputType {
-  _id: string
-  tokens?: string
+  _id: ObjectId
+  tokens: string
   championships: object[]
   refresh_count: number
   logged_in_at: string
   created_at: string
   updated_at: string
-  _doc?: userType
+  _doc: userType
 }
 
 const userSchema = new mongoose.Schema<userType>({
