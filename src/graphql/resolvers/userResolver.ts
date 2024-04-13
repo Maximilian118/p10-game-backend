@@ -8,7 +8,7 @@ const userResolver = {
     try {
       const { name, email, password, icon, profile_picture } = args.userInput
 
-      if (name) {
+      if (!name) {
         throw new GraphQLError(
           resolverError({
             type: "name",
