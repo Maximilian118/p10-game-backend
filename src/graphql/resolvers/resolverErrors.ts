@@ -105,9 +105,7 @@ export const iconErrors = (
   const type = "icon"
 
   if (icon) {
-    if (
-      !/^[a-z0-9-]+-[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)
-    ) {
+    if (!/^[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
       throwError(type, icon, "Icon filename is not valid... Tricky one.")
     }
   }
@@ -132,7 +130,7 @@ export const profilePictureErrors = (
 
   if (profile_picture) {
     if (
-      !/^[a-z0-9-]+-[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(
+      !/^[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(
         profile_picture,
       )
     ) {

@@ -83,7 +83,7 @@ exports.passConfirmErrors = passConfirmErrors;
 const iconErrors = (icon, profile_picture, user) => {
     const type = "icon";
     if (icon) {
-        if (!/^[a-z0-9-]+-[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
+        if (!/^[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
             throwError(type, icon, "Icon filename is not valid... Tricky one.");
         }
     }
@@ -100,7 +100,7 @@ exports.iconErrors = iconErrors;
 const profilePictureErrors = (profile_picture, icon, user) => {
     const type = "profile_picture";
     if (profile_picture) {
-        if (!/^[a-z0-9-]+-[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture)) {
+        if (!/^[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture)) {
             throwError(type, profile_picture, "Profile Picture filename is not valid... Tricky one.");
         }
     }
