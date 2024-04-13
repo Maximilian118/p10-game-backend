@@ -22,7 +22,7 @@ app.use("/graphql", (req, res) => {
             return {
                 type: parsedError.type,
                 message: parsedError.message,
-                code: parsedError.code ? parsedError.code : null,
+                code: parsedError.code ? parsedError.code : 500,
                 locations: error.locations,
                 path: error.path,
             };
