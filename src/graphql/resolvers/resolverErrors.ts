@@ -1,4 +1,5 @@
 import { GraphQLError } from "graphql"
+import User from "../../models/user"
 
 const throwError = (
   type: string,
@@ -16,18 +17,36 @@ const throwError = (
   )
 }
 
-export const nameErrors = (name: string) => {
-  const value = "name"
+export const nameErrors = (name: string): void => {
+  const type = "name"
 
   if (!name) {
-    throwError(value, name, "Please enter a name.")
+    throwError(type, name, "Please enter a name.")
   }
 
   if (!/^[a-zA-Z\s-']{1,30}$/.test(name)) {
     if (name.length > 30) {
-      throwError(value, name, "30 characters maximum.")
+      throwError(type, name, "30 characters maximum.")
     }
 
-    throwError(value, name, "No numbers or special characters.")
+    throwError(type, name, "No numbers or special characters.")
+  }
+}
+
+export const emailErrors = async (email: string): Promise<void> => {
+  const type = "email"
+
+  if (!email) {
+    throwError(type, email, "Please enter an email.")
+  }
+
+  if (
+    !/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(email)
+  ) {
+    throwError(type, email, "Please enter a valid email address.")
+  }
+
+  if (await User.findOne({ email })) {
+    throwError(type, email, "A user by that email already exists!")
   }
 }
