@@ -1,6 +1,6 @@
 import moment from "moment"
 import User, { userInputType, userType } from "../../models/user"
-import { hashPass, signTokens } from "../../shared/utility"
+import { hashPass, resolverError, signTokens } from "../../shared/utility"
 import { GraphQLError } from "graphql"
 
 const userResolver = {
@@ -8,12 +8,13 @@ const userResolver = {
     try {
       const { name, email, password, icon, profile_picture } = args.userInput
 
-      if (!name) {
+      if (name) {
         throw new GraphQLError(
-          JSON.stringify({
+          resolverError({
             type: "name",
-            message: "Please enter a name.",
+            message: "Please enter a name",
             code: 400,
+            value: name,
           }),
         )
       }

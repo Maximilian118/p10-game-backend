@@ -20,11 +20,12 @@ const userResolver = {
     createUser: (args) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { name, email, password, icon, profile_picture } = args.userInput;
-            if (!name) {
-                throw new graphql_1.GraphQLError(JSON.stringify({
+            if (name) {
+                throw new graphql_1.GraphQLError((0, utility_1.resolverError)({
                     type: "name",
-                    message: "Please enter a name.",
+                    message: "Please enter a name",
                     code: 400,
+                    value: name,
                 }));
             }
             const user = new user_1.default({

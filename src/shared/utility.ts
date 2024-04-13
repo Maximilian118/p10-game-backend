@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken"
 import { genSalt, hash, compare } from "bcryptjs"
 import { userType } from "../models/user"
+import { GraphQLError, SourceLocation } from "graphql"
 
 // Sign Tokens with JWT.
 export const signTokens = (user: userType) => {
@@ -28,12 +29,56 @@ export const signTokens = (user: userType) => {
 }
 
 // Hash a password.
-export const hashPass = async (pass: string) => {
+export const hashPass = async (pass: string): Promise<string> => {
   const s = await genSalt(Number(process.env.PASSWORD_SALT))
   return hash(pass, s)
 }
 
 // Authenticate a password.
-export const comparePass = async (pass: string, hashedPass: string) => {
+export const comparePass = async (
+  pass: string,
+  hashedPass: string,
+): Promise<boolean> => {
   return await compare(pass, hashedPass)
+}
+
+interface errorTypes {
+  type: string
+  message: string
+  code: number
+  value: any
+}
+
+// Receives error string, parses it, then returns a formatted error.
+export const formatErrHandler = (
+  error: GraphQLError,
+): errorTypes & {
+  locations: readonly SourceLocation[]
+  path: readonly (string | number)[]
+} => {
+  const err = JSON.parse(error.message)
+
+  return {
+    type: err.type,
+    message: err.message,
+    code: err.code ? err.code : 500,
+    value: err.value ? err.value : null,
+    locations: error.locations ? error.locations : [],
+    path: error.path ? error.path : [],
+  }
+}
+
+// Return a new resolver error.
+export const resolverError = ({
+  type,
+  message,
+  code,
+  value,
+}: errorTypes): string => {
+  return JSON.stringify({
+    type: type.toLowerCase(),
+    message,
+    code: Number(code),
+    value,
+  })
 }

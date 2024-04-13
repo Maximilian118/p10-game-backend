@@ -9,6 +9,7 @@ const express_graphql_1 = require("express-graphql");
 const mongoose_1 = __importDefault(require("mongoose"));
 const schemas_1 = __importDefault(require("./graphql/schemas/schemas"));
 const resolvers_1 = __importDefault(require("./graphql/resolvers/resolvers"));
+const utility_1 = require("./shared/utility");
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: "1mb" }));
 app.use(corsHandler_1.default);
@@ -18,14 +19,7 @@ app.use("/graphql", (req, res) => {
         rootValue: resolvers_1.default,
         graphiql: true,
         customFormatErrorFn(error) {
-            const parsedError = JSON.parse(error.message);
-            return {
-                type: parsedError.type,
-                message: parsedError.message,
-                code: parsedError.code ? parsedError.code : 500,
-                locations: error.locations,
-                path: error.path,
-            };
+            return (0, utility_1.formatErrHandler)(error);
         },
     })(req, res);
 });
