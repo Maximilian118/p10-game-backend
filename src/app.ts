@@ -1,5 +1,4 @@
 import express from "express"
-import errorHandler from "./middleware/errorHandler"
 import corsHandler from "./middleware/corsHandler"
 import { graphqlHTTP } from "express-graphql"
 import mongoose from "mongoose"
@@ -41,9 +40,6 @@ app.use("/graphql", (req, res) => {
     },
   })(req, res)
 })
-
-// Error handler middleware.
-app.use(errorHandler)
 
 // Connect to a local MongoDB Database. If no port is specified in CLI use port 3001.
 mongoose
