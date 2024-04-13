@@ -4,8 +4,8 @@ const userSchema = `
     refresh_count: Int!
     name: String!
     email: String!
-    icon: String!
-    profile_picture: String!
+    icon: String
+    profile_picture: String
     championships: [String]!
     logged_in_at: String!
     created_at: String!
