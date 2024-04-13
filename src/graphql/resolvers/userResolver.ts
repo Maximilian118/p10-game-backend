@@ -1,7 +1,7 @@
 import moment from "moment"
 import User, { userInputType, userType } from "../../models/user"
 import { hashPass, signTokens } from "../../shared/utility"
-import { emailErrors, nameErrors } from "./resolverErrors"
+import { emailErrors, nameErrors, passwordErrors } from "./resolverErrors"
 
 const userResolver = {
   createUser: async (args: { userInput: userInputType }): Promise<userType> => {
@@ -10,6 +10,7 @@ const userResolver = {
 
       nameErrors(name)
       await emailErrors(email)
+      passwordErrors(password)
 
       const user = new User(
         {

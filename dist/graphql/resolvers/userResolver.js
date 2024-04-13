@@ -22,6 +22,7 @@ const userResolver = {
             const { name, email, password, icon, profile_picture } = args.userInput;
             (0, resolverErrors_1.nameErrors)(name);
             yield (0, resolverErrors_1.emailErrors)(email);
+            (0, resolverErrors_1.passwordErrors)(password);
             const user = new user_1.default({
                 name,
                 email,

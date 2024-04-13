@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.emailErrors = exports.nameErrors = void 0;
+exports.passwordErrors = exports.emailErrors = exports.nameErrors = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
 const throwError = (type, value, message, code) => {
@@ -49,4 +49,22 @@ const emailErrors = (email) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.emailErrors = emailErrors;
+const passwordErrors = (password) => {
+    const type = "password";
+    if (!password) {
+        throwError(type, password, "Please enter a password.");
+    }
+    else {
+        if (password.length <= 8) {
+            throwError(type, password, "Minimum 8 characters.");
+        }
+        if (password.length >= 40) {
+            throwError(type, password, "Maximum 40 characters.");
+        }
+        if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(password)) {
+            throwError(type, password, "At least one letter and one number.");
+        }
+    }
+};
+exports.passwordErrors = passwordErrors;
 //# sourceMappingURL=resolverErrors.js.map

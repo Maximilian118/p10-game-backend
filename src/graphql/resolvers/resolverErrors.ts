@@ -50,3 +50,27 @@ export const emailErrors = async (email: string): Promise<void> => {
     throwError(type, email, "A user by that email already exists!")
   }
 }
+
+export const passwordErrors = (password: string | null): void => {
+  const type = "password"
+
+  if (!password) {
+    throwError(type, password, "Please enter a password.")
+  } else {
+    if (password.length <= 8) {
+      throwError(type, password, "Minimum 8 characters.")
+    }
+
+    if (password.length >= 40) {
+      throwError(type, password, "Maximum 40 characters.")
+    }
+
+    if (
+      !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(
+        password,
+      )
+    ) {
+      throwError(type, password, "At least one letter and one number.")
+    }
+  }
+}
