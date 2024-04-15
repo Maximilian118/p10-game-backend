@@ -1,7 +1,9 @@
-import userResolver from "./userResolver"
+import userResolvers from "./userResolvers"
+import bucketResolvers from "./bucketResolvers"
 
 const Resolvers = {
-  ...userResolver,
+  ...userResolvers,
+  ...bucketResolvers,
 }
 
 export default Resolvers

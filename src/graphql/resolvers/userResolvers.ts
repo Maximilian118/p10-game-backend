@@ -11,7 +11,7 @@ import {
   profilePictureErrors,
 } from "./resolverErrors"
 
-const userResolver = {
+const userResolvers = {
   createUser: async (args: { userInput: userInputType }): Promise<userType> => {
     try {
       const { name, email, password, passConfirm, icon, profile_picture } =
@@ -57,4 +57,4 @@ const userResolver = {
   },
 }
 
-export default userResolver
+export default userResolvers

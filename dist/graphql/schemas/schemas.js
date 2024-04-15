@@ -5,11 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const graphql_1 = require("graphql");
 const userSchema_1 = __importDefault(require("./userSchema"));
+const bucketSchema_1 = __importDefault(require("./bucketSchema"));
 const Schema = (0, graphql_1.buildSchema)(`
   ${userSchema_1.default}
+  ${bucketSchema_1.default}
 
   type rootQuery {
-    login(email: String!, password: String): User!
+    signS3(filename: String!, filetype: String!): S3Payload!
   }
 
   type rootMutation {

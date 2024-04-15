@@ -1,11 +1,13 @@
 import { buildSchema } from "graphql"
 import userSchema from "./userSchema"
+import bucketSchema from "./bucketSchema"
 
 const Schema = buildSchema(`
   ${userSchema}
+  ${bucketSchema}
 
   type rootQuery {
-    login(email: String!, password: String): User!
+    signS3(filename: String!, filetype: String!): S3Payload!
   }
 
   type rootMutation {
