@@ -1,8 +1,7 @@
 const bucketSchema = `
   type S3Payload {
-    signedRequest: String!,
-    url: String!,
-    tokens: String,
+    signedRequest: String!
+    url: String!
   }
 `
 

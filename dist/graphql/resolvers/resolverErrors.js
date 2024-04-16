@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = void 0;
+exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
 const throwError = (type, value, message, code) => {
@@ -23,49 +23,50 @@ const throwError = (type, value, message, code) => {
         code: code ? code : 400,
     }));
 };
+exports.throwError = throwError;
 const nameErrors = (name) => {
     const type = "name";
     if (!name) {
-        throwError(type, name, "Please enter a name.");
+        (0, exports.throwError)(type, name, "Please enter a name.");
     }
     if (!/^[a-zA-Z\s-']{1,30}$/.test(name)) {
         if (name.length > 30) {
-            throwError(type, name, "30 characters maximum.");
+            (0, exports.throwError)(type, name, "30 characters maximum.");
         }
-        throwError(type, name, "No numbers or special characters.");
+        (0, exports.throwError)(type, name, "No numbers or special characters.");
     }
 };
 exports.nameErrors = nameErrors;
 const emailErrors = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const type = "email";
     if (!email) {
-        throwError(type, email, "Please enter an email.");
+        (0, exports.throwError)(type, email, "Please enter an email.");
     }
     if (!/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(email)) {
-        throwError(type, email, "Please enter a valid email address.");
+        (0, exports.throwError)(type, email, "Please enter a valid email address.");
     }
     if (yield user_1.default.findOne({ email })) {
-        throwError(type, email, "A user by that email already exists!");
+        (0, exports.throwError)(type, email, "A user by that email already exists!");
     }
 });
 exports.emailErrors = emailErrors;
 const passwordErrors = (password, passConfirm) => {
     const type = "password";
     if (!password) {
-        throwError(type, password, "Please enter a password.");
+        (0, exports.throwError)(type, password, "Please enter a password.");
     }
     else {
         if (password.length <= 8) {
-            throwError(type, password, "Minimum 8 characters.");
+            (0, exports.throwError)(type, password, "Minimum 8 characters.");
         }
         if (password.length >= 40) {
-            throwError(type, password, "Maximum 40 characters.");
+            (0, exports.throwError)(type, password, "Maximum 40 characters.");
         }
         if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(password)) {
-            throwError(type, password, "At least one letter and one number.");
+            (0, exports.throwError)(type, password, "At least one letter and one number.");
         }
         if (password !== passConfirm) {
-            throwError(type, password, "Passwords do not match.");
+            (0, exports.throwError)(type, password, "Passwords do not match.");
         }
     }
 };
@@ -73,10 +74,10 @@ exports.passwordErrors = passwordErrors;
 const passConfirmErrors = (passConfirm, password) => {
     const type = "passConfirm";
     if (!passConfirm) {
-        throwError(type, password, "Please enter your password confirmation.");
+        (0, exports.throwError)(type, password, "Please enter your password confirmation.");
     }
     if (passConfirm !== password) {
-        throwError(type, password, "Passwords do not match.");
+        (0, exports.throwError)(type, password, "Passwords do not match.");
     }
 };
 exports.passConfirmErrors = passConfirmErrors;
@@ -84,15 +85,15 @@ const iconErrors = (icon, profile_picture, user) => {
     const type = "icon";
     if (icon) {
         if (!/^[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
-            throwError(type, icon, "Icon filename is not valid... Tricky one.");
+            (0, exports.throwError)(type, icon, "Icon filename is not valid... Tricky one.");
         }
     }
     if (icon && !profile_picture) {
-        throwError(type, icon, "Got Icon but no Profile Picture?!");
+        (0, exports.throwError)(type, icon, "Got Icon but no Profile Picture?!");
     }
     if (icon && user) {
         if (icon === user.icon) {
-            throwError(type, icon, "Duplicate Icon.");
+            (0, exports.throwError)(type, icon, "Duplicate Icon.");
         }
     }
 };
@@ -101,15 +102,15 @@ const profilePictureErrors = (profile_picture, icon, user) => {
     const type = "profile_picture";
     if (profile_picture) {
         if (!/^[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture)) {
-            throwError(type, profile_picture, "Profile Picture filename is not valid... Tricky one.");
+            (0, exports.throwError)(type, profile_picture, "Profile Picture filename is not valid... Tricky one.");
         }
     }
     if (profile_picture && !icon) {
-        throwError(type, icon, "Got Profile Picture but no Icon?!");
+        (0, exports.throwError)(type, icon, "Got Profile Picture but no Icon?!");
     }
     if (profile_picture && user) {
         if (profile_picture === user.profile_picture) {
-            throwError(type, profile_picture, "Duplicate Profile Picture.");
+            (0, exports.throwError)(type, profile_picture, "Duplicate Profile Picture.");
         }
     }
 };

@@ -7,7 +7,7 @@ const Schema = buildSchema(`
   ${bucketSchema}
 
   type rootQuery {
-    signS3(filename: String!, filetype: String!): S3Payload!
+    signS3(filename: String!): S3Payload!
   }
 
   type rootMutation {

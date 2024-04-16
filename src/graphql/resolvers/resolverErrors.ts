@@ -1,7 +1,7 @@
 import { GraphQLError } from "graphql"
 import User, { userType } from "../../models/user"
 
-const throwError = (
+export const throwError = (
   type: string,
   value: any,
   message: `${string}.` | `${string}!` | `${string}?`,

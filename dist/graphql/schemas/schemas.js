@@ -11,7 +11,7 @@ const Schema = (0, graphql_1.buildSchema)(`
   ${bucketSchema_1.default}
 
   type rootQuery {
-    signS3(filename: String!, filetype: String!): S3Payload!
+    signS3(filename: String!): S3Payload!
   }
 
   type rootMutation {

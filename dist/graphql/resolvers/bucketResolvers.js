@@ -11,25 +11,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_s3_1 = require("@aws-sdk/client-s3");
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
+const resolverErrors_1 = require("./resolverErrors");
 const bucketResolvers = {
     signS3: (_a) => __awaiter(void 0, [_a], void 0, function* ({ filename }) {
         try {
+            const bucket = process.env.AWS_BUCKET;
+            const region = process.env.AWS_REGION;
             const access_key = process.env.AWS_ACCESS_KEY_ID;
             const secret_key = process.env.AWS_SECRET_ACCESS_KEY;
+            if (!bucket || !region || !access_key || !secret_key) {
+                throw (0, resolverErrors_1.throwError)("Resovler: signS3", null, "Could not retrieve environment variables!");
+            }
             const client = new client_s3_1.S3Client({
-                region: "eu-west-2",
+                region,
                 credentials: {
-                    accessKeyId: access_key ? access_key : "",
-                    secretAccessKey: secret_key ? secret_key : "",
+                    accessKeyId: access_key,
+                    secretAccessKey: secret_key,
                 },
             });
             const params = {
-                Bucket: process.env.AWS_BUCKET,
+                Bucket: bucket,
                 Key: filename,
+                ACL: "public-read",
             };
             const command = new client_s3_1.PutObjectCommand(params);
             const signedRequest = yield (0, s3_request_presigner_1.getSignedUrl)(client, command, { expiresIn: 60 });
-            const url = `http://${process.env.AWS_BUCKET}.s3.eu-west-2.amazonaws.com/${filename}`;
+            const url = `http://${bucket}.s3.${region}.amazonaws.com/${filename}`;
             return {
                 signedRequest,
                 url,
