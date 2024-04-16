@@ -105,8 +105,10 @@ export const iconErrors = (
   const type = "icon"
 
   if (icon) {
-    if (!/^[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
-      throwError(type, icon, "Icon filename is not valid... Tricky one.")
+    if (
+      !/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon) // prettier-ignore
+    ) {
+      throwError(type, icon, "Icon URL is not valid... Tricky one.")
     }
   }
 
@@ -130,14 +132,12 @@ export const profilePictureErrors = (
 
   if (profile_picture) {
     if (
-      !/^[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(
-        profile_picture,
-      )
+      !/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture) // prettier-ignore
     ) {
       throwError(
         type,
         profile_picture,
-        "Profile Picture filename is not valid... Tricky one.",
+        "Profile Picture URL is not valid... Tricky one.",
       )
     }
   }
