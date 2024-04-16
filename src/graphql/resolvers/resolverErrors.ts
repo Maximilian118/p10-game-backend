@@ -1,10 +1,12 @@
 import { GraphQLError } from "graphql"
 import User, { userType } from "../../models/user"
 
+type punctuation = `${string}.` | `${string}!` | `${string}?`
+
 export const throwError = (
   type: string,
   value: any,
-  message: `${string}.` | `${string}!` | `${string}?`,
+  message: punctuation,
   code?: number,
 ): GraphQLError => {
   throw new GraphQLError(
@@ -150,5 +152,11 @@ export const profilePictureErrors = (
     if (profile_picture === user.profile_picture) {
       throwError(type, profile_picture, "Duplicate Profile Picture.")
     }
+  }
+}
+
+export const imageErrors = (type: string, value: string): void => {
+  if (!/^[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(value)) {
+    throwError(type, value, "Image file name is not valid.")
   }
 }

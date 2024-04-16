@@ -4,11 +4,13 @@ import {
   PutObjectCommandInput,
 } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import { throwError } from "./resolverErrors"
+import { imageErrors, throwError } from "./resolverErrors"
 
 const bucketResolvers = {
   signS3: async ({ filename }: { filename: string }) => {
     try {
+      imageErrors("Resolver: signS3", filename)
+
       const bucket = process.env.AWS_BUCKET
       const region = process.env.AWS_REGION
       const access_key = process.env.AWS_ACCESS_KEY_ID

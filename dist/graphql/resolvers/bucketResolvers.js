@@ -15,6 +15,7 @@ const resolverErrors_1 = require("./resolverErrors");
 const bucketResolvers = {
     signS3: (_a) => __awaiter(void 0, [_a], void 0, function* ({ filename }) {
         try {
+            (0, resolverErrors_1.imageErrors)("Resolver: signS3", filename);
             const bucket = process.env.AWS_BUCKET;
             const region = process.env.AWS_REGION;
             const access_key = process.env.AWS_ACCESS_KEY_ID;

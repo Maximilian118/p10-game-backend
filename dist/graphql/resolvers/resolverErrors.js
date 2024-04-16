@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
+exports.imageErrors = exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
 const throwError = (type, value, message, code) => {
@@ -115,4 +115,10 @@ const profilePictureErrors = (profile_picture, icon, user) => {
     }
 };
 exports.profilePictureErrors = profilePictureErrors;
+const imageErrors = (type, value) => {
+    if (!/^[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(value)) {
+        (0, exports.throwError)(type, value, "Image file name is not valid.");
+    }
+};
+exports.imageErrors = imageErrors;
 //# sourceMappingURL=resolverErrors.js.map
