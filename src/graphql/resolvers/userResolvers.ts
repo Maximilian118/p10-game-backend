@@ -14,11 +14,10 @@ import {
 const userResolvers = {
   createUser: async (args: { userInput: userInputType }): Promise<userType> => {
     try {
-      const { name, email, password, passConfirm, icon, profile_picture } =
-        args.userInput
+      const { name, email, password, passConfirm, icon, profile_picture } = args.userInput
 
       // Check for errors.
-      nameErrors(name)
+      await nameErrors(name)
       await emailErrors(email)
       passwordErrors(password, passConfirm)
       passConfirmErrors(passConfirm, password)

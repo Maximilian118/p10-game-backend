@@ -16,6 +16,7 @@ const utility_1 = require("../../shared/utility");
 const bucketResolvers = {
     signS3: (_a) => __awaiter(void 0, [_a], void 0, function* ({ filename }) {
         try {
+            yield (0, resolverErrors_1.nameErrors)(filename.split("/")[0]);
             (0, resolverErrors_1.imageErrors)("Resolver: signS3", filename);
             const bucket = process.env.AWS_BUCKET;
             const region = process.env.AWS_REGION;

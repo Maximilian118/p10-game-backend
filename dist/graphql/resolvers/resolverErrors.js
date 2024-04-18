@@ -24,7 +24,7 @@ const throwError = (type, value, message, code) => {
     }));
 };
 exports.throwError = throwError;
-const nameErrors = (name) => {
+const nameErrors = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const type = "name";
     if (!name) {
         (0, exports.throwError)(type, name, "Please enter a name.");
@@ -35,7 +35,11 @@ const nameErrors = (name) => {
         }
         (0, exports.throwError)(type, name, "No numbers or special characters.");
     }
-};
+    const user = yield user_1.default.findOne({ name });
+    if (user) {
+        (0, exports.throwError)(type, name, "This username is taken.");
+    }
+});
 exports.nameErrors = nameErrors;
 const emailErrors = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const type = "email";

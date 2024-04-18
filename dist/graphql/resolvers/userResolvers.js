@@ -20,7 +20,7 @@ const userResolvers = {
     createUser: (args) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const { name, email, password, passConfirm, icon, profile_picture } = args.userInput;
-            (0, resolverErrors_1.nameErrors)(name);
+            yield (0, resolverErrors_1.nameErrors)(name);
             yield (0, resolverErrors_1.emailErrors)(email);
             (0, resolverErrors_1.passwordErrors)(password, passConfirm);
             (0, resolverErrors_1.passConfirmErrors)(passConfirm, password);

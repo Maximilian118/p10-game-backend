@@ -1,11 +1,12 @@
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
-import { imageErrors, throwError } from "./resolverErrors"
+import { imageErrors, nameErrors, throwError } from "./resolverErrors"
 import { isDuplicateS3 } from "../../shared/utility"
 
 const bucketResolvers = {
   signS3: async ({ filename }: { filename: string }) => {
     try {
+      await nameErrors(filename.split("/")[0])
       imageErrors("Resolver: signS3", filename)
 
       const bucket = process.env.AWS_BUCKET
