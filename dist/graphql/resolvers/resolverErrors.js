@@ -84,7 +84,7 @@ exports.passConfirmErrors = passConfirmErrors;
 const iconErrors = (icon, profile_picture, user) => {
     const type = "icon";
     if (icon) {
-        if (!/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon)) {
+        if (!/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/icon\/[a-z0-9-]+$/i.test(icon)) {
             (0, exports.throwError)(type, icon, "Icon URL is not valid... Tricky one.");
         }
     }
@@ -101,7 +101,7 @@ exports.iconErrors = iconErrors;
 const profilePictureErrors = (profile_picture, icon, user) => {
     const type = "profile_picture";
     if (profile_picture) {
-        if (!/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture)) {
+        if (!/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/profile-picture\/[a-z0-9-]+$/i.test(profile_picture)) {
             (0, exports.throwError)(type, profile_picture, "Profile Picture URL is not valid... Tricky one.");
         }
     }
@@ -116,7 +116,7 @@ const profilePictureErrors = (profile_picture, icon, user) => {
 };
 exports.profilePictureErrors = profilePictureErrors;
 const imageErrors = (type, value) => {
-    if (!/^[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(value)) {
+    if (!/^[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(value)) {
         (0, exports.throwError)(type, value, "Image file name is not valid.");
     }
 };

@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const client_s3_1 = require("@aws-sdk/client-s3");
 const s3_request_presigner_1 = require("@aws-sdk/s3-request-presigner");
 const resolverErrors_1 = require("./resolverErrors");
+const utility_1 = require("../../shared/utility");
 const bucketResolvers = {
     signS3: (_a) => __awaiter(void 0, [_a], void 0, function* ({ filename }) {
         try {
@@ -35,6 +36,9 @@ const bucketResolvers = {
                 Key: filename,
                 ACL: "public-read",
             };
+            if (yield (0, utility_1.isDuplicateS3)(client, params)) {
+                (0, resolverErrors_1.throwError)("Resolver: signS3", filename, "Diplicate Image.");
+            }
             const command = new client_s3_1.PutObjectCommand(params);
             const signedRequest = yield (0, s3_request_presigner_1.getSignedUrl)(client, command, { expiresIn: 60 });
             const url = `http://${bucket}.s3.${region}.amazonaws.com/${filename}`;

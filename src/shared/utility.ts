@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken"
 import { genSalt, hash, compare } from "bcryptjs"
 import { userType } from "../models/user"
 import { GraphQLError, SourceLocation } from "graphql"
+import { HeadObjectCommand, PutObjectAclCommandInput, S3Client } from "@aws-sdk/client-s3"
 
 // Sign Tokens with JWT.
 export const signTokens = (user: userType) => {
@@ -35,10 +36,7 @@ export const hashPass = async (pass: string): Promise<string> => {
 }
 
 // Authenticate a password.
-export const comparePass = async (
-  pass: string,
-  hashedPass: string,
-): Promise<boolean> => {
+export const comparePass = async (pass: string, hashedPass: string): Promise<boolean> => {
   return await compare(pass, hashedPass)
 }
 
@@ -84,5 +82,18 @@ export const formatErrHandler = ( error: GraphQLError ): {
       locations: error.locations ? error.locations : [],
       path: error.path ? error.path : [],
     }
+  }
+}
+
+// Check if passed key is already uploaded to AWS S3.
+export const isDuplicateS3 = async (
+  client: S3Client,
+  params: PutObjectAclCommandInput,
+): Promise<boolean> => {
+  try {
+    await client.send(new HeadObjectCommand(params))
+    return true
+  } catch (error) {
+    return false
   }
 }

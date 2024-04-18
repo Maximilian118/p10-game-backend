@@ -42,9 +42,7 @@ export const emailErrors = async (email: string): Promise<void> => {
     throwError(type, email, "Please enter an email.")
   }
 
-  if (
-    !/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(email)
-  ) {
+  if (!/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(email)) {
     throwError(type, email, "Please enter a valid email address.")
   }
 
@@ -53,10 +51,7 @@ export const emailErrors = async (email: string): Promise<void> => {
   }
 }
 
-export const passwordErrors = (
-  password: string | null,
-  passConfirm: string,
-): void => {
+export const passwordErrors = (password: string | null, passConfirm: string): void => {
   const type = "password"
 
   if (!password) {
@@ -70,11 +65,7 @@ export const passwordErrors = (
       throwError(type, password, "Maximum 40 characters.")
     }
 
-    if (
-      !/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(
-        password,
-      )
-    ) {
+    if (!/^(?=.*\d)(?=.*[a-zA-Z])[a-zA-Z\d!?_<>"'$£%^&(){};:+=*#]{8,40}$/.test(password)) {
       throwError(type, password, "At least one letter and one number.")
     }
 
@@ -84,10 +75,7 @@ export const passwordErrors = (
   }
 }
 
-export const passConfirmErrors = (
-  passConfirm: string,
-  password: string | null,
-): void => {
+export const passConfirmErrors = (passConfirm: string, password: string | null): void => {
   const type = "passConfirm"
 
   if (!passConfirm) {
@@ -108,7 +96,7 @@ export const iconErrors = (
 
   if (icon) {
     if (
-      !/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/icon\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(icon) // prettier-ignore
+      !/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/icon\/[a-z0-9-]+$/i.test(icon) // prettier-ignore
     ) {
       throwError(type, icon, "Icon URL is not valid... Tricky one.")
     }
@@ -134,13 +122,9 @@ export const profilePictureErrors = (
 
   if (profile_picture) {
     if (
-      !/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/profile-picture\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(profile_picture) // prettier-ignore
+      !/^http:\/\/[a-z0-9-.]+\/[a-z0-9-]+\/profile-picture\/[a-z0-9-]+$/i.test(profile_picture) // prettier-ignore
     ) {
-      throwError(
-        type,
-        profile_picture,
-        "Profile Picture URL is not valid... Tricky one.",
-      )
+      throwError(type, profile_picture, "Profile Picture URL is not valid... Tricky one.")
     }
   }
 
@@ -156,7 +140,7 @@ export const profilePictureErrors = (
 }
 
 export const imageErrors = (type: string, value: string): void => {
-  if (!/^[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+-\d+\/[a-z0-9-]+$/i.test(value)) {
+  if (!/^[a-z0-9-]+\/[a-z0-9-]+\/[a-z0-9-]+$/i.test(value)) {
     throwError(type, value, "Image file name is not valid.")
   }
 }

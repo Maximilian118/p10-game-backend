@@ -1,10 +1,7 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectCommandInput,
-} from "@aws-sdk/client-s3"
+import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { imageErrors, throwError } from "./resolverErrors"
+import { isDuplicateS3 } from "../../shared/utility"
 
 const bucketResolvers = {
   signS3: async ({ filename }: { filename: string }) => {
@@ -17,11 +14,7 @@ const bucketResolvers = {
       const secret_key = process.env.AWS_SECRET_ACCESS_KEY
 
       if (!bucket || !region || !access_key || !secret_key) {
-        throw throwError(
-          "Resovler: signS3",
-          null,
-          "Could not retrieve environment variables!",
-        )
+        throw throwError("Resovler: signS3", null, "Could not retrieve environment variables!")
       }
 
       const client = new S3Client({
@@ -36,6 +29,10 @@ const bucketResolvers = {
         Bucket: bucket,
         Key: filename,
         ACL: "public-read",
+      }
+
+      if (await isDuplicateS3(client, params)) {
+        throwError("Resolver: signS3", filename, "Diplicate Image.")
       }
 
       const command = new PutObjectCommand(params)
