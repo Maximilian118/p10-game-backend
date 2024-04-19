@@ -1,4 +1,10 @@
 const userSchema = `
+  type Permissions {
+    admin: Boolean
+    adjudicator: Boolean
+    guest: Boolean
+  }
+
   type User {
     _id: ID!
     refresh_count: Int!
@@ -7,6 +13,7 @@ const userSchema = `
     icon: String
     profile_picture: String
     championships: [String]!
+    permissions: Permissions!
     logged_in_at: String!
     created_at: String!
     updated_at: String!

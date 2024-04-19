@@ -11,11 +11,24 @@ const userSchema = new mongoose_1.default.Schema({
     password: { type: String, required: false, min: 8 },
     icon: { type: String, required: false, default: "" },
     profile_picture: { type: String, required: false, default: "" },
-    championships: [{ type: String }],
+    championships: [{ type: Object }],
     refresh_count: { type: Number, default: 0 },
     logged_in_at: { type: String, default: null },
     created_at: { type: String, default: (0, moment_1.default)().format() },
     updated_at: { type: String, default: (0, moment_1.default)().format() },
+    permissions: {
+        type: {
+            admin: Boolean,
+            adjudicator: Boolean,
+            guest: Boolean,
+        },
+        required: false,
+        default: {
+            admin: false,
+            adjudicator: false,
+            guest: false,
+        },
+    },
 });
 const User = mongoose_1.default.model("User", userSchema);
 exports.default = User;

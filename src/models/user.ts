@@ -15,6 +15,11 @@ export interface userType extends userInputType {
   _id: ObjectId
   tokens: string
   championships: object[]
+  permissions: {
+    admin: boolean
+    adjudicator: boolean
+    guest: boolean
+  }
   refresh_count: number
   logged_in_at: string
   created_at: string
@@ -28,11 +33,24 @@ const userSchema = new mongoose.Schema<userType>({
   password: { type: String, required: false, min: 8 }, // User encryptied password.
   icon: { type: String, required: false, default: "" }, // User Icon. Same image as Profile Picture but compressed to aprox 0.05mb.
   profile_picture: { type: String, required: false, default: "" }, // User Profile Picture. Compressed to aprox 0.5mb.
-  championships: [{ type: String }], // Array of Championships the User has created.
+  championships: [{ type: Object }], // Array of Championships the User has created.
   refresh_count: { type: Number, default: 0 }, // Refresh count.
   logged_in_at: { type: String, default: null }, // Last logged in.
   created_at: { type: String, default: moment().format() }, // When the user signed up.
   updated_at: { type: String, default: moment().format() }, // Last user activity.
+  permissions: {
+    type: {
+      admin: Boolean,
+      adjudicator: Boolean,
+      guest: Boolean,
+    },
+    required: false,
+    default: {
+      admin: false,
+      adjudicator: false,
+      guest: false,
+    },
+  },
 })
 
 const User = mongoose.model<userType>("User", userSchema)
