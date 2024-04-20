@@ -108,7 +108,7 @@ export const isDuplicateS3 = async (
 }
 
 // Delete all images in the icon and profile-picture paths.
-export const deletePPS3 = async (
+export const deleteS3 = async (
   client: S3Client,
   params: PutObjectAclCommandInput,
 ): Promise<void> => {
@@ -133,7 +133,7 @@ export const deletePPS3 = async (
       })
     })
   } catch (error) {
-    console.log("Failed to list profile pictures...")
+    console.log("Failed to list images...")
   }
 
   const deleteParams: DeleteObjectsCommandInput = {
@@ -146,6 +146,6 @@ export const deletePPS3 = async (
   try {
     await client.send(new DeleteObjectsCommand(deleteParams))
   } catch (error) {
-    console.log("Delete profile pictures Failed...")
+    console.log("Delete images failed...")
   }
 }

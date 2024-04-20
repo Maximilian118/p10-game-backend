@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletePPS3 = exports.isDuplicateS3 = exports.formatErrHandler = exports.comparePass = exports.hashPass = exports.signTokens = void 0;
+exports.deleteS3 = exports.isDuplicateS3 = exports.formatErrHandler = exports.comparePass = exports.hashPass = exports.signTokens = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = require("bcryptjs");
 const client_s3_1 = require("@aws-sdk/client-s3");
@@ -85,7 +85,7 @@ const isDuplicateS3 = (client, params) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.isDuplicateS3 = isDuplicateS3;
-const deletePPS3 = (client, params) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteS3 = (client, params) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const keyArr = [];
     const fileNameArr = (_a = params.Key) === null || _a === void 0 ? void 0 : _a.split("/");
@@ -105,7 +105,7 @@ const deletePPS3 = (client, params) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (error) {
-        console.log("Failed to list profile pictures...");
+        console.log("Failed to list images...");
     }
     const deleteParams = Object.assign(Object.assign({}, params), { Delete: {
             Objects: keyArr,
@@ -114,8 +114,8 @@ const deletePPS3 = (client, params) => __awaiter(void 0, void 0, void 0, functio
         yield client.send(new client_s3_1.DeleteObjectsCommand(deleteParams));
     }
     catch (error) {
-        console.log("Delete profile pictures Failed...");
+        console.log("Delete images failed...");
     }
 });
-exports.deletePPS3 = deletePPS3;
+exports.deleteS3 = deleteS3;
 //# sourceMappingURL=utility.js.map

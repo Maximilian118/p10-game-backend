@@ -1,7 +1,7 @@
 import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { imageErrors, throwError } from "./resolverErrors"
-import { deletePPS3, isDuplicateS3 } from "../../shared/utility"
+import { deleteS3, isDuplicateS3 } from "../../shared/utility"
 import { AuthRequest } from "../../middleware/auth"
 
 const bucketResolvers = {
@@ -41,7 +41,7 @@ const bucketResolvers = {
       }
 
       if (!duplicate) {
-        await deletePPS3(client, params)
+        await deleteS3(client, params)
         const command = new PutObjectCommand(params)
         signedRequest = await getSignedUrl(client, command, { expiresIn: 60 }) // prettier-ignore
       }

@@ -42,7 +42,7 @@ const bucketResolvers = {
                 (0, resolverErrors_1.throwError)("Resolver: signS3", filename, "Diplicate Image.");
             }
             if (!duplicate) {
-                yield (0, utility_1.deletePPS3)(client, params);
+                yield (0, utility_1.deleteS3)(client, params);
                 const command = new client_s3_1.PutObjectCommand(params);
                 signedRequest = yield (0, s3_request_presigner_1.getSignedUrl)(client, command, { expiresIn: 60 });
             }
