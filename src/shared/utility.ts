@@ -2,7 +2,16 @@ import jwt from "jsonwebtoken"
 import { genSalt, hash, compare } from "bcryptjs"
 import { userType } from "../models/user"
 import { GraphQLError, SourceLocation } from "graphql"
-import { HeadObjectCommand, PutObjectAclCommandInput, S3Client } from "@aws-sdk/client-s3"
+import {
+  DeleteObjectsCommand,
+  DeleteObjectsCommandInput,
+  HeadObjectCommand,
+  ListObjectsCommand,
+  ListObjectsCommandInput,
+  ObjectIdentifier,
+  PutObjectAclCommandInput,
+  S3Client,
+} from "@aws-sdk/client-s3"
 
 // Sign Tokens with JWT.
 export const signTokens = (user: userType) => {
@@ -95,5 +104,48 @@ export const isDuplicateS3 = async (
     return true
   } catch (error) {
     return false
+  }
+}
+
+// Delete all images in the icon and profile-picture paths.
+export const deletePPS3 = async (
+  client: S3Client,
+  params: PutObjectAclCommandInput,
+): Promise<void> => {
+  const keyArr: ObjectIdentifier[] = []
+  const fileNameArr = params.Key?.split("/")!
+
+  const listParams: ListObjectsCommandInput = {
+    Bucket: params.Bucket,
+    Prefix: `${fileNameArr[0]}/${fileNameArr[1]}`,
+  }
+
+  try {
+    const list = await client.send(new ListObjectsCommand(listParams))
+
+    if (list.Contents && list.Contents.length === 0) {
+      return
+    }
+
+    list.Contents?.forEach((img) => {
+      keyArr.push({
+        Key: img.Key!,
+      })
+    })
+  } catch (error) {
+    console.log("Failed to list profile pictures...")
+  }
+
+  const deleteParams: DeleteObjectsCommandInput = {
+    ...params,
+    Delete: {
+      Objects: keyArr,
+    },
+  }
+
+  try {
+    await client.send(new DeleteObjectsCommand(deleteParams))
+  } catch (error) {
+    console.log("Delete profile pictures Failed...")
   }
 }
