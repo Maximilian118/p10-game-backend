@@ -2,9 +2,10 @@ import { S3Client, PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/clie
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { imageErrors, nameErrors, throwError } from "./resolverErrors"
 import { isDuplicateS3 } from "../../shared/utility"
+import { AuthRequest } from "../../middleware/auth"
 
 const bucketResolvers = {
-  signS3: async ({ filename }: { filename: string }) => {
+  signS3: async ({ filename }: { filename: string }, req: AuthRequest) => {
     try {
       await nameErrors(filename.split("/")[0])
       imageErrors("Resolver: signS3", filename)
@@ -32,18 +33,22 @@ const bucketResolvers = {
         ACL: "public-read",
       }
 
-      if (await isDuplicateS3(client, params)) {
+      const duplicate = await isDuplicateS3(client, params)
+      let signedRequest = ""
+
+      if (req.isAuth && duplicate) {
         throwError("Resolver: signS3", filename, "Diplicate Image.")
       }
 
-      const command = new PutObjectCommand(params)
-
-      const signedRequest = await getSignedUrl(client, command, { expiresIn: 60 }) // prettier-ignore
-      const url = `http://${bucket}.s3.${region}.amazonaws.com/${filename}`
+      if (!duplicate) {
+        const command = new PutObjectCommand(params)
+        signedRequest = await getSignedUrl(client, command, { expiresIn: 60 }) // prettier-ignore
+      }
 
       return {
         signedRequest,
-        url,
+        url: `http://${bucket}.s3.${region}.amazonaws.com/${filename}`,
+        duplicate,
       }
     } catch (err) {
       throw err

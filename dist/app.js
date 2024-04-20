@@ -4,15 +4,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const corsHandler_1 = __importDefault(require("./middleware/corsHandler"));
 const express_graphql_1 = require("express-graphql");
 const mongoose_1 = __importDefault(require("mongoose"));
 const utility_1 = require("./shared/utility");
 const schemas_1 = __importDefault(require("./graphql/schemas/schemas"));
 const resolvers_1 = __importDefault(require("./graphql/resolvers/resolvers"));
+const corsHandler_1 = __importDefault(require("./middleware/corsHandler"));
+const auth_1 = __importDefault(require("./middleware/auth"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: "1mb" }));
 app.use(corsHandler_1.default);
+app.use(auth_1.default);
 app.use("/graphql", (req, res) => {
     (0, express_graphql_1.graphqlHTTP)({
         schema: schemas_1.default,

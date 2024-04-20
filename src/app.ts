@@ -1,5 +1,4 @@
 import express from "express"
-import corsHandler from "./middleware/corsHandler"
 import { graphqlHTTP } from "express-graphql"
 import mongoose from "mongoose"
 import { formatErrHandler } from "./shared/utility"
@@ -8,8 +7,9 @@ import { formatErrHandler } from "./shared/utility"
 import Schema from "./graphql/schemas/schemas"
 import Resolvers from "./graphql/resolvers/resolvers"
 
-// Import token authentication middleware.
-// const auth = require("./middleware/auth")
+// Import middleware.
+import corsHandler from "./middleware/corsHandler"
+import auth from "./middleware/auth"
 
 // Initialise express.
 const app = express()
@@ -21,7 +21,7 @@ app.use(express.json({ limit: "1mb" }))
 app.use(corsHandler)
 
 // Make token authentication middleware available in all reducers by passing req.
-// app.use(auth)
+app.use(auth)
 
 // Initialise GraphQL.
 // Function takes a method to shape errors.
