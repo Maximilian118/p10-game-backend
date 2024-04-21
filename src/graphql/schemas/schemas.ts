@@ -8,6 +8,7 @@ const Schema = buildSchema(`
 
   type rootQuery {
     signS3(filename: String!): S3Payload!
+    login(email: String!, password: String): User!
   }
 
   type rootMutation {

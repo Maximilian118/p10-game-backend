@@ -1,6 +1,6 @@
 import moment from "moment"
-import User, { userInputType, userType } from "../../models/user"
-import { hashPass, signTokens } from "../../shared/utility"
+import User, { userInputType, userType, userTypeMongo } from "../../models/user"
+import { comparePass, hashPass, signTokens } from "../../shared/utility"
 
 import {
   emailErrors,
@@ -9,6 +9,8 @@ import {
   passConfirmErrors,
   passwordErrors,
   profilePictureErrors,
+  throwError,
+  userErrors,
 } from "./resolverErrors"
 
 const userResolvers = {
@@ -45,6 +47,29 @@ const userResolvers = {
       await user.save()
 
       // Return the new user with tokens.
+      return {
+        ...user._doc,
+        tokens: JSON.stringify(signTokens(user)),
+        password: null,
+      }
+    } catch (err) {
+      throw err
+    }
+  },
+  login: async ({ email, password }: userInputType): Promise<userType> => {
+    try {
+      const user = (await User.findOne({ email })) as userTypeMongo
+      userErrors(user)
+
+      if (!password) {
+        throwError("password", user, "No password entry.")
+      } else if (user.password && !(await comparePass(password, user.password))) {
+        throwError("password", user, "Incorrect password.")
+      }
+
+      user.logged_in_at = moment().format()
+      await user.save()
+
       return {
         ...user._doc,
         tokens: JSON.stringify(signTokens(user)),

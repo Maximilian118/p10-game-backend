@@ -12,6 +12,7 @@ const Schema = (0, graphql_1.buildSchema)(`
 
   type rootQuery {
     signS3(filename: String!): S3Payload!
+    login(email: String!, password: String): User!
   }
 
   type rootMutation {

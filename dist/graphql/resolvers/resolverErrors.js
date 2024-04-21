@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.imageErrors = exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
+exports.userErrors = exports.imageErrors = exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
 const throwError = (type, value, message, code) => {
@@ -125,4 +125,11 @@ const imageErrors = (type, value) => {
     }
 };
 exports.imageErrors = imageErrors;
+const userErrors = (user) => {
+    const type = "email";
+    if (!user) {
+        (0, exports.throwError)(type, user, "Account not found!");
+    }
+};
+exports.userErrors = userErrors;
 //# sourceMappingURL=resolverErrors.js.map

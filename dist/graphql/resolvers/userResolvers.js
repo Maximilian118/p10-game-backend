@@ -46,6 +46,24 @@ const userResolvers = {
             throw err;
         }
     }),
+    login: (_a) => __awaiter(void 0, [_a], void 0, function* ({ email, password }) {
+        try {
+            const user = (yield user_1.default.findOne({ email }));
+            (0, resolverErrors_1.userErrors)(user);
+            if (!password) {
+                (0, resolverErrors_1.throwError)("password", user, "No password entry.");
+            }
+            else if (user.password && !(yield (0, utility_1.comparePass)(password, user.password))) {
+                (0, resolverErrors_1.throwError)("password", user, "Incorrect password.");
+            }
+            user.logged_in_at = (0, moment_1.default)().format();
+            yield user.save();
+            return Object.assign(Object.assign({}, user._doc), { tokens: JSON.stringify((0, utility_1.signTokens)(user)), password: null });
+        }
+        catch (err) {
+            throw err;
+        }
+    }),
 };
 exports.default = userResolvers;
 //# sourceMappingURL=userResolvers.js.map

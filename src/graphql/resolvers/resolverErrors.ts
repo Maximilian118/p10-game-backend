@@ -150,3 +150,11 @@ export const imageErrors = (type: string, value: string): void => {
     throwError(type, value, "Image file name is not valid.")
   }
 }
+
+export const userErrors = (user?: userType): void => {
+  const type = "email"
+
+  if (!user) {
+    throwError(type, user, "Account not found!")
+  }
+}

@@ -27,6 +27,10 @@ export interface userType extends userInputType {
   _doc: userType
 }
 
+export interface userTypeMongo extends userType {
+  save: () => Promise<{}>
+}
+
 const userSchema = new mongoose.Schema<userType>({
   name: { type: String, required: true }, // User Name.
   email: { type: String, required: true }, // User Email.
