@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema<userType>({
   championships: [{ type: mongoose.Schema.ObjectId, ref: "Championships" }], // Array of Championships the User has created.
   badges: [{ type: mongoose.Schema.ObjectId, ref: "Badge" }],
   refresh_count: { type: Number, default: 0 }, // Refresh count.
-  logged_in_at: { type: String, default: null }, // Last logged in.
+  logged_in_at: { type: String, default: moment().format() }, // Last logged in.
   created_at: { type: String, default: moment().format() }, // When the user signed up.
   updated_at: { type: String, default: moment().format() }, // Last user activity.
   permissions: {

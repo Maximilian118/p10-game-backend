@@ -14,7 +14,7 @@ const userSchema = new mongoose_1.default.Schema({
     championships: [{ type: mongoose_1.default.Schema.ObjectId, ref: "Championships" }],
     badges: [{ type: mongoose_1.default.Schema.ObjectId, ref: "Badge" }],
     refresh_count: { type: Number, default: 0 },
-    logged_in_at: { type: String, default: null },
+    logged_in_at: { type: String, default: (0, moment_1.default)().format() },
     created_at: { type: String, default: (0, moment_1.default)().format() },
     updated_at: { type: String, default: (0, moment_1.default)().format() },
     permissions: {

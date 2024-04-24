@@ -36,9 +36,6 @@ const userResolvers = {
           icon,
           profile_picture,
           password: await hashPass(password as string),
-          created_at: moment().format(),
-          updated_at: moment().format(),
-          logged_in_at: moment().format(),
         },
         (err: string) => {
           if (err) throw new Error(err)

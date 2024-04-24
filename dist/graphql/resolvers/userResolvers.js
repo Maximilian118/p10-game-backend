@@ -34,9 +34,6 @@ const userResolvers = {
                 icon,
                 profile_picture,
                 password: yield (0, utility_1.hashPass)(password),
-                created_at: (0, moment_1.default)().format(),
-                updated_at: (0, moment_1.default)().format(),
-                logged_in_at: (0, moment_1.default)().format(),
             }, (err) => {
                 if (err)
                     throw new Error(err);
