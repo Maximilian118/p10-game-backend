@@ -89,6 +89,7 @@ const userResolvers = {
       const randomPass = generator.generate({
         length: 10,
         numbers: true,
+        strict: true,
       })
 
       const transporter = nodemailer.createTransport({
@@ -113,7 +114,7 @@ const userResolvers = {
         subject: "P10-Game Password Reset",
         text: `
         Your password is now: 
-        ${randomPass}.
+        ${randomPass}
 
         If you did not expect this email contact maxcrosby118@gmail.com immediately! 🚨
         `,
