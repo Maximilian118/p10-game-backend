@@ -5,6 +5,15 @@ const userSchema = `
     guest: Boolean
   }
 
+  type Badge {
+    _id: ID!
+    user_id: ID!
+    url: String!
+    name: String!
+    rarity: Int!
+    created_at: String!
+  }
+
   type User {
     _id: ID!
     refresh_count: Int!
@@ -13,6 +22,7 @@ const userSchema = `
     icon: String
     profile_picture: String
     championships: [String]!
+    badges: [Badge!]!
     permissions: Permissions!
     logged_in_at: String!
     created_at: String!
