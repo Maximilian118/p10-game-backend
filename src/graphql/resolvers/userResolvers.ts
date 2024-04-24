@@ -1,6 +1,8 @@
 import moment from "moment"
 import User, { userInputType, userType, userTypeMongo } from "../../models/user"
 import { comparePass, hashPass, signTokens } from "../../shared/utility"
+import generator from "generate-password"
+import nodemailer from "nodemailer"
 
 import {
   emailErrors,
@@ -75,6 +77,59 @@ const userResolvers = {
         tokens: JSON.stringify(signTokens(user)),
         password: null,
       }
+    } catch (err) {
+      throw err
+    }
+  },
+  forgot: async ({ email }: { email: string }): Promise<string> => {
+    try {
+      const user = (await User.findOne({ email })) as userTypeMongo
+      userErrors(user)
+
+      const randomPass = generator.generate({
+        length: 10,
+        numbers: true,
+      })
+
+      const transporter = nodemailer.createTransport({
+        host: process.env.NODEMAILER_HOST,
+        port: 465,
+        secure: true, // use SSL.
+        auth: {
+          user: process.env.NODEMAILER_EMAIL,
+          pass: process.env.NODEMAILER_PASS,
+        },
+      })
+
+      transporter.verify((err) => {
+        if (err) {
+          console.error(err)
+        }
+      })
+
+      const mail = {
+        from: process.env.NODEMAILER_EMAIL,
+        to: email,
+        subject: "P10-Game Password Reset",
+        text: `
+        Your password is now: 
+        ${randomPass}.
+
+        If you did not expect this email contact maxcrosby118@gmail.com immediately! 🚨
+        `,
+      }
+
+      user.password = await hashPass(randomPass as string)
+      user.updated_at = moment().format()
+      await user.save()
+
+      transporter.sendMail(mail, (err) => {
+        if (err) {
+          console.error(err)
+        }
+      })
+
+      return "Forgot request submitted."
     } catch (err) {
       throw err
     }

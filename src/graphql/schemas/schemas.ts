@@ -13,6 +13,7 @@ const Schema = buildSchema(`
 
   type rootMutation {
     createUser(userInput: userInput): User!
+    forgot(email: String!): String!
   }
 
   schema {

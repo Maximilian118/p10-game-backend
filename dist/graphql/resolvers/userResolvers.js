@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const moment_1 = __importDefault(require("moment"));
 const user_1 = __importDefault(require("../../models/user"));
 const utility_1 = require("../../shared/utility");
+const generate_password_1 = __importDefault(require("generate-password"));
+const nodemailer_1 = __importDefault(require("nodemailer"));
 const resolverErrors_1 = require("./resolverErrors");
 const userResolvers = {
     createUser: (args) => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,6 +61,53 @@ const userResolvers = {
             user.logged_in_at = (0, moment_1.default)().format();
             yield user.save();
             return Object.assign(Object.assign({}, user._doc), { tokens: JSON.stringify((0, utility_1.signTokens)(user)), password: null });
+        }
+        catch (err) {
+            throw err;
+        }
+    }),
+    forgot: (_b) => __awaiter(void 0, [_b], void 0, function* ({ email }) {
+        try {
+            const user = (yield user_1.default.findOne({ email }));
+            (0, resolverErrors_1.userErrors)(user);
+            const randomPass = generate_password_1.default.generate({
+                length: 10,
+                numbers: true,
+            });
+            const transporter = nodemailer_1.default.createTransport({
+                host: process.env.NODEMAILER_HOST,
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.NODEMAILER_EMAIL,
+                    pass: process.env.NODEMAILER_PASS,
+                },
+            });
+            transporter.verify((err) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+            const mail = {
+                from: process.env.NODEMAILER_EMAIL,
+                to: email,
+                subject: "P10-Game Password Reset",
+                text: `
+        Your password is now: 
+        ${randomPass}.
+
+        If you did not expect this email contact maxcrosby118@gmail.com immediately! 🚨
+        `,
+            };
+            user.password = yield (0, utility_1.hashPass)(randomPass);
+            user.updated_at = (0, moment_1.default)().format();
+            yield user.save();
+            transporter.sendMail(mail, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+            return "Forgot request submitted.";
         }
         catch (err) {
             throw err;

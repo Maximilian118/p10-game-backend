@@ -17,6 +17,7 @@ const Schema = (0, graphql_1.buildSchema)(`
 
   type rootMutation {
     createUser(userInput: userInput): User!
+    forgot(email: String!): String!
   }
 
   schema {
