@@ -123,10 +123,6 @@ export const deleteS3 = async (
   try {
     const list = await client.send(new ListObjectsCommand(listParams))
 
-    if (list.Contents && list.Contents.length === 0) {
-      return
-    }
-
     list.Contents?.forEach((img) => {
       keyArr.push({
         Key: img.Key!,
@@ -134,6 +130,10 @@ export const deleteS3 = async (
     })
   } catch (error) {
     console.log("Failed to list images...")
+  }
+
+  if (keyArr.length === 0) {
+    return
   }
 
   const deleteParams: DeleteObjectsCommandInput = {
@@ -146,7 +146,6 @@ export const deleteS3 = async (
   try {
     await client.send(new DeleteObjectsCommand(deleteParams))
   } catch (error) {
-    console.log(error)
     console.log("Delete images failed...")
   }
 }

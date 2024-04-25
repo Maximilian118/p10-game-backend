@@ -95,9 +95,6 @@ const deleteS3 = (client, params) => __awaiter(void 0, void 0, void 0, function*
     };
     try {
         const list = yield client.send(new client_s3_1.ListObjectsCommand(listParams));
-        if (list.Contents && list.Contents.length === 0) {
-            return;
-        }
         (_b = list.Contents) === null || _b === void 0 ? void 0 : _b.forEach((img) => {
             keyArr.push({
                 Key: img.Key,
@@ -107,6 +104,9 @@ const deleteS3 = (client, params) => __awaiter(void 0, void 0, void 0, function*
     catch (error) {
         console.log("Failed to list images...");
     }
+    if (keyArr.length === 0) {
+        return;
+    }
     const deleteParams = Object.assign(Object.assign({}, params), { Delete: {
             Objects: keyArr,
         } });
@@ -114,7 +114,6 @@ const deleteS3 = (client, params) => __awaiter(void 0, void 0, void 0, function*
         yield client.send(new client_s3_1.DeleteObjectsCommand(deleteParams));
     }
     catch (error) {
-        console.log(error);
         console.log("Delete images failed...");
     }
 });
