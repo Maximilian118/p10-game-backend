@@ -114,6 +114,7 @@ const deleteS3 = (client, params) => __awaiter(void 0, void 0, void 0, function*
         yield client.send(new client_s3_1.DeleteObjectsCommand(deleteParams));
     }
     catch (error) {
+        console.log(error);
         console.log("Delete images failed...");
     }
 });

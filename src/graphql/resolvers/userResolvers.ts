@@ -81,7 +81,10 @@ const userResolvers = {
   forgot: async ({ email }: { email: string }): Promise<string> => {
     try {
       const user = (await User.findOne({ email })) as userTypeMongo
-      userErrors(user)
+
+      if (!user) {
+        return "Forgot request submitted."
+      }
 
       const randomPass = generator.generate({
         length: 10,

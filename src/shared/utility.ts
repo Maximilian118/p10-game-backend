@@ -146,6 +146,7 @@ export const deleteS3 = async (
   try {
     await client.send(new DeleteObjectsCommand(deleteParams))
   } catch (error) {
+    console.log(error)
     console.log("Delete images failed...")
   }
 }

@@ -66,7 +66,9 @@ const userResolvers = {
     forgot: (_b) => __awaiter(void 0, [_b], void 0, function* ({ email }) {
         try {
             const user = (yield user_1.default.findOne({ email }));
-            (0, resolverErrors_1.userErrors)(user);
+            if (!user) {
+                return "Forgot request submitted.";
+            }
             const randomPass = generate_password_1.default.generate({
                 length: 10,
                 numbers: true,
