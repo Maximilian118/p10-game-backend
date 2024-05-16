@@ -127,6 +127,20 @@ const userResolvers = {
             throw err;
         }
     }),
+    updateEmail: (_d, req_2) => __awaiter(void 0, [_d, req_2], void 0, function* ({ email }, req) {
+        try {
+            const user = (yield user_1.default.findById(req._id));
+            (0, resolverErrors_1.userErrors)(user);
+            yield (0, resolverErrors_1.emailErrors)(email, user);
+            user.email = email;
+            user.updated_at = (0, moment_1.default)().format();
+            yield user.save();
+            return Object.assign(Object.assign({}, user._doc), { tokens: req.tokens, password: null });
+        }
+        catch (err) {
+            throw err;
+        }
+    }),
 };
 exports.default = userResolvers;
 //# sourceMappingURL=userResolvers.js.map

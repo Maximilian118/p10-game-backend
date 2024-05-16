@@ -41,13 +41,18 @@ const nameErrors = (name) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.nameErrors = nameErrors;
-const emailErrors = (email) => __awaiter(void 0, void 0, void 0, function* () {
+const emailErrors = (email, user) => __awaiter(void 0, void 0, void 0, function* () {
     const type = "email";
     if (!email) {
         (0, exports.throwError)(type, email, "Please enter an email.");
     }
     if (!/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(email)) {
         (0, exports.throwError)(type, email, "Please enter a valid email address.");
+    }
+    if (user) {
+        if (email === user.email) {
+            (0, exports.throwError)(type, email, "This is already your email address.");
+        }
     }
     if (yield user_1.default.findOne({ email })) {
         (0, exports.throwError)(type, email, "A user by that email already exists!");

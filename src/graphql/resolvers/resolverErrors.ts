@@ -41,7 +41,7 @@ export const nameErrors = async (name: string): Promise<void> => {
   }
 }
 
-export const emailErrors = async (email: string): Promise<void> => {
+export const emailErrors = async (email: string, user?: userType): Promise<void> => {
   const type = "email"
 
   if (!email) {
@@ -50,6 +50,12 @@ export const emailErrors = async (email: string): Promise<void> => {
 
   if (!/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(email)) {
     throwError(type, email, "Please enter a valid email address.")
+  }
+
+  if (user) {
+    if (email === user.email) {
+      throwError(type, email, "This is already your email address.")
+    }
   }
 
   if (await User.findOne({ email })) {
