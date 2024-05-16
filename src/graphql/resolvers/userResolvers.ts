@@ -14,6 +14,7 @@ import {
   throwError,
   userErrors,
 } from "./resolverErrors"
+import { AuthRequest } from "../../middleware/auth"
 
 const userResolvers = {
   createUser: async (args: { userInput: userInputType }): Promise<userType> => {
@@ -131,6 +132,29 @@ const userResolvers = {
       })
 
       return "Forgot request submitted."
+    } catch (err) {
+      throw err
+    }
+  },
+  updatePP: async (
+    { icon, profile_picture }: { icon: string; profile_picture: string },
+    req: AuthRequest,
+  ): Promise<userType> => {
+    try {
+      const user = (await User.findById(req._id)) as userTypeMongo
+      userErrors(user)
+
+      user.icon = icon
+      user.profile_picture = profile_picture
+      user.updated_at = moment().format()
+
+      await user.save()
+
+      return {
+        ...user._doc,
+        tokens: req.tokens as string,
+        password: null,
+      }
     } catch (err) {
       throw err
     }

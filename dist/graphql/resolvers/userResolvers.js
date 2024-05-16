@@ -113,6 +113,20 @@ const userResolvers = {
             throw err;
         }
     }),
+    updatePP: (_c, req_1) => __awaiter(void 0, [_c, req_1], void 0, function* ({ icon, profile_picture }, req) {
+        try {
+            const user = (yield user_1.default.findById(req._id));
+            (0, resolverErrors_1.userErrors)(user);
+            user.icon = icon;
+            user.profile_picture = profile_picture;
+            user.updated_at = (0, moment_1.default)().format();
+            yield user.save();
+            return Object.assign(Object.assign({}, user._doc), { tokens: req.tokens, password: null });
+        }
+        catch (err) {
+            throw err;
+        }
+    }),
 };
 exports.default = userResolvers;
 //# sourceMappingURL=userResolvers.js.map

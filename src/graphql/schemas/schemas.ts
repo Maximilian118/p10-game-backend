@@ -14,6 +14,7 @@ const Schema = buildSchema(`
   type rootMutation {
     createUser(userInput: userInput): User!
     forgot(email: String!): String!
+    updatePP(icon: String!, profile_picture: String!): User!
   }
 
   schema {

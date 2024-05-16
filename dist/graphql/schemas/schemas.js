@@ -18,6 +18,7 @@ const Schema = (0, graphql_1.buildSchema)(`
   type rootMutation {
     createUser(userInput: userInput): User!
     forgot(email: String!): String!
+    updatePP(icon: String!, profile_picture: String!): User!
   }
 
   schema {
