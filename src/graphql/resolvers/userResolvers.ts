@@ -179,6 +179,26 @@ const userResolvers = {
       throw err
     }
   },
+  updateName: async ({ name }: { name: string }, req: AuthRequest): Promise<userType> => {
+    try {
+      const user = (await User.findById(req._id)) as userTypeMongo
+      userErrors(user)
+      await nameErrors(name, user)
+
+      user.name = name
+      user.updated_at = moment().format()
+
+      await user.save()
+
+      return {
+        ...user._doc,
+        tokens: req.tokens as string,
+        password: null,
+      }
+    } catch (err) {
+      throw err
+    }
+  },
 }
 
 export default userResolvers

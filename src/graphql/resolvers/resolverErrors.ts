@@ -19,7 +19,7 @@ export const throwError = (
   )
 }
 
-export const nameErrors = async (name: string): Promise<void> => {
+export const nameErrors = async (name: string, user?: userType): Promise<void> => {
   const type = "name"
 
   if (!name) {
@@ -34,9 +34,13 @@ export const nameErrors = async (name: string): Promise<void> => {
     throwError(type, name, "No numbers or special characters.")
   }
 
-  const user = await User.findOne({ name })
+  if (user && name === user.name) {
+    throwError(type, name, "This is already your username.")
+  }
 
-  if (user) {
+  const dbUser = await User.findOne({ name })
+
+  if (dbUser) {
     throwError(type, name, "This username is taken.")
   }
 }

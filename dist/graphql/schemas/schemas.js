@@ -19,6 +19,7 @@ const Schema = (0, graphql_1.buildSchema)(`
     createUser(userInput: userInput): User!
     forgot(email: String!): String!
     updatePP(icon: String!, profile_picture: String!): User!
+    updateName(name: String!): User!
     updateEmail(email: String!): User!
   }
 
