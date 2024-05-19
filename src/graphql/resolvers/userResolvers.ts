@@ -199,6 +199,45 @@ const userResolvers = {
       throw err
     }
   },
+  updatePassword: async (
+    {
+      currentPass,
+      password,
+      passConfirm,
+    }: {
+      currentPass: string
+      password: string
+      passConfirm: string
+    },
+    req: AuthRequest,
+  ): Promise<userType> => {
+    try {
+      const user = (await User.findById(req._id)) as userTypeMongo
+      userErrors(user)
+
+      if (!currentPass) {
+        throwError("currentPass", user, "No current password entry.")
+      } else if (user.password && !(await comparePass(currentPass, user.password))) {
+        throwError("currentPass", user, "Incorrect password.")
+      }
+
+      passwordErrors(password, passConfirm)
+      passConfirmErrors(passConfirm, password)
+
+      user.password = await hashPass(password as string)
+      user.updated_at = moment().format()
+
+      await user.save()
+
+      return {
+        ...user._doc,
+        tokens: req.tokens as string,
+        password: null,
+      }
+    } catch (err) {
+      throw err
+    }
+  },
 }
 
 export default userResolvers

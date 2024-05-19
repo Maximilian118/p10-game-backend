@@ -17,6 +17,7 @@ const Schema = buildSchema(`
     updatePP(icon: String!, profile_picture: String!): User!
     updateName(name: String!): User!
     updateEmail(email: String!): User!
+    updatePassword(currentPass: String!, password: String!, passConfirm: String!): User!
   }
 
   schema {

@@ -155,6 +155,27 @@ const userResolvers = {
             throw err;
         }
     }),
+    updatePassword: (_f, req_4) => __awaiter(void 0, [_f, req_4], void 0, function* ({ currentPass, password, passConfirm, }, req) {
+        try {
+            const user = (yield user_1.default.findById(req._id));
+            (0, resolverErrors_1.userErrors)(user);
+            if (!currentPass) {
+                (0, resolverErrors_1.throwError)("currentPass", user, "No current password entry.");
+            }
+            else if (user.password && !(yield (0, utility_1.comparePass)(currentPass, user.password))) {
+                (0, resolverErrors_1.throwError)("currentPass", user, "Incorrect password.");
+            }
+            (0, resolverErrors_1.passwordErrors)(password, passConfirm);
+            (0, resolverErrors_1.passConfirmErrors)(passConfirm, password);
+            user.password = yield (0, utility_1.hashPass)(password);
+            user.updated_at = (0, moment_1.default)().format();
+            yield user.save();
+            return Object.assign(Object.assign({}, user._doc), { tokens: req.tokens, password: null });
+        }
+        catch (err) {
+            throw err;
+        }
+    }),
 };
 exports.default = userResolvers;
 //# sourceMappingURL=userResolvers.js.map
