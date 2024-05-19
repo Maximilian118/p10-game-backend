@@ -167,6 +167,35 @@ const userResolvers = {
             }
             (0, resolverErrors_1.passwordErrors)(password, passConfirm);
             (0, resolverErrors_1.passConfirmErrors)(passConfirm, password);
+            const transporter = nodemailer_1.default.createTransport({
+                host: process.env.NODEMAILER_HOST,
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.NODEMAILER_EMAIL,
+                    pass: process.env.NODEMAILER_PASS,
+                },
+            });
+            transporter.verify((err) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+            const mail = {
+                from: process.env.NODEMAILER_EMAIL,
+                to: user.email,
+                subject: "P10-Game Password Change",
+                text: `
+        Your password has been changed.
+
+        If you did not expect this email contact maxcrosby118@gmail.com immediately! 🚨
+        `,
+            };
+            transporter.sendMail(mail, (err) => {
+                if (err) {
+                    console.error(err);
+                }
+            });
             user.password = yield (0, utility_1.hashPass)(password);
             user.updated_at = (0, moment_1.default)().format();
             yield user.save();
