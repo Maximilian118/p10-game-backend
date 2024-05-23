@@ -1,7 +1,6 @@
 import mongoose from "mongoose"
 import moment from "moment"
 import { ObjectId } from "mongodb"
-import { badgeType } from "./badge"
 
 export interface userInputType {
   name: string

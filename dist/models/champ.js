@@ -74,6 +74,15 @@ const champSchema = new mongoose_1.default.Schema({
     settings: {
         maxPlayers: { type: Number, default: 0 },
         inactivePlayers: { type: Boolean, default: true },
+        protests: {
+            protestsAlwaysVote: { type: Boolean, default: false },
+            allowMultipleProtests: { type: Boolean, default: false },
+        },
+        ruleChange: {
+            ruleChangeAlwaysVote: { type: Boolean, default: true },
+            allowMultipleRuleChanges: { type: Boolean, default: true },
+            ruleChangeExpiry: { type: String, default: "M" },
+        },
         autoOpen: {
             auto: { type: Boolean, default: false },
             dateTime: { type: String, required: true },
