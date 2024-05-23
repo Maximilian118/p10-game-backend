@@ -16,7 +16,10 @@ export interface userType extends userInputType {
   _id: ObjectId
   tokens: string
   championships: object[]
-  badges: badgeType[]
+  badges: {
+    badge: ObjectId
+    dateTime: string
+  }[]
   permissions: {
     admin: boolean
     adjudicator: boolean
@@ -39,24 +42,21 @@ const userSchema = new mongoose.Schema<userType>({
   password: { type: String, required: false, min: 8 }, // User encryptied password.
   icon: { type: String, required: false, default: "" }, // User Icon. Same image as Profile Picture but compressed to aprox 0.05mb.
   profile_picture: { type: String, required: false, default: "" }, // User Profile Picture. Compressed to aprox 0.5mb.
-  championships: [{ type: mongoose.Schema.ObjectId, ref: "Championships" }], // Array of Championships the User has created.
-  badges: [{ type: mongoose.Schema.ObjectId, ref: "Badge" }],
+  championships: [{ type: mongoose.Schema.ObjectId, ref: "Champ" }], // Array of Championships the User has created.
+  badges: [
+    {
+      badge: { type: mongoose.Schema.ObjectId, ref: "Badge" }, // Badge object.
+      dateTime: { type: String, default: moment().format() }, // dateTime user won this Badge.
+    },
+  ],
   refresh_count: { type: Number, default: 0 }, // Refresh count.
   logged_in_at: { type: String, default: moment().format() }, // Last logged in.
   created_at: { type: String, default: moment().format() }, // When the user signed up.
   updated_at: { type: String, default: moment().format() }, // Last user activity.
   permissions: {
-    type: {
-      admin: Boolean,
-      adjudicator: Boolean,
-      guest: Boolean,
-    },
-    required: false,
-    default: {
-      admin: false,
-      adjudicator: false,
-      guest: false,
-    },
+    admin: { type: Boolean, default: false },
+    adjudicator: { type: Boolean, default: false },
+    guest: { type: Boolean, default: false },
   },
 })
 
