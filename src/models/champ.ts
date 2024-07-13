@@ -7,7 +7,18 @@ export interface champType {
   name: string
   icon: string
   season: string
-  nextRound: string
+  rounds: {
+    round: number
+    completed: boolean
+    standings: {
+      player: ObjectId
+      points: number
+      history: {
+        round: string
+        points: number
+      }[]
+    }[]
+  }[]
   adjudicator: {
     current: ObjectId
     since: string
@@ -24,14 +35,6 @@ export interface champType {
     result: number
     points: number
   }[]
-  points: {
-    player: ObjectId
-    points: number
-    history: {
-      round: string
-      points: number
-    }[]
-  }[]
   rulesAndRegs: {
     default: boolean
     list: {
@@ -42,7 +45,7 @@ export interface champType {
         text: string
         updatedBy: ObjectId
         updated_at: string
-      }
+      }[]
       subsections: {
         text: string
         createdBy: ObjectId
@@ -51,7 +54,7 @@ export interface champType {
           text: string
           updatedBy: ObjectId
           updated_at: string
-        }
+        }[]
       }[]
     }[]
   }
@@ -173,7 +176,24 @@ const champSchema = new mongoose.Schema<champType>({
   name: { type: String, required: true }, // Name of the championship.
   icon: { type: String, default: "" }, // Icon of the champ.
   season: { type: String, required: true }, // The name of the current season.
-  nextRound: { type: String, default: "Round 1" }, // The name of the next round.
+  rounds: {
+    round: { type: Number, required: true },
+    completed: { type: Boolean, default: false },
+    standings: [
+      // An array of all the users and their current standings.
+      {
+        player: { type: mongoose.Schema.ObjectId, required: true, ref: "User" },
+        points: { type: Number, required: true },
+        history: [
+          {
+            // The amount of points this user had in previous rounds.
+            round: { type: String, required: true },
+            points: { type: Number, required: true },
+          },
+        ],
+      },
+    ],
+  },
   adjudicator: {
     // The adjudicator of the champ.
     current: { type: mongoose.Schema.ObjectId, required: true, ref: "User" }, // Current adjudicator.
@@ -195,20 +215,6 @@ const champSchema = new mongoose.Schema<champType>({
       // How many points are awarded for what results?
       result: { type: Number, required: true }, // Result of a round of betting.
       points: { type: Number, required: true }, // Amount rewarded for result.
-    },
-  ],
-  points: [
-    {
-      // An array of all the users and their current standings.
-      player: { type: mongoose.Schema.ObjectId, required: true, ref: "User" },
-      points: { type: Number, required: true },
-      history: [
-        {
-          // The amount of points this user had in previous rounds.
-          round: { type: String, required: true },
-          points: { type: Number, required: true },
-        },
-      ],
     },
   ],
   rulesAndRegs: {

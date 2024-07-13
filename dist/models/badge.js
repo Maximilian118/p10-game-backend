@@ -7,10 +7,13 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const moment_1 = __importDefault(require("moment"));
 const badgeSchema = new mongoose_1.default.Schema({
     championship: { type: mongoose_1.default.Schema.ObjectId, ref: "Champ" },
-    url: { type: String, required: true, default: "" },
-    name: { type: String, required: true, default: "" },
+    url: { type: String, required: true },
+    name: { type: String, required: true },
     rarity: { type: Number, required: true, default: 0 },
     awardedTo: [{ type: mongoose_1.default.Schema.ObjectId, ref: "User" }],
+    awardedHow: { type: String, required: true },
+    awardedDesc: { type: String, required: true },
+    zoom: { type: Number, default: 100 },
     created_at: { type: String, default: (0, moment_1.default)().format() },
     updated_at: { type: String, default: (0, moment_1.default)().format() },
 });

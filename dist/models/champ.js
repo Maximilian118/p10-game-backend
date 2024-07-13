@@ -9,7 +9,22 @@ const champSchema = new mongoose_1.default.Schema({
     name: { type: String, required: true },
     icon: { type: String, default: "" },
     season: { type: String, required: true },
-    nextRound: { type: String, default: "Round 1" },
+    rounds: {
+        round: { type: Number, required: true },
+        completed: { type: Boolean, default: false },
+        standings: [
+            {
+                player: { type: mongoose_1.default.Schema.ObjectId, required: true, ref: "User" },
+                points: { type: Number, required: true },
+                history: [
+                    {
+                        round: { type: String, required: true },
+                        points: { type: Number, required: true },
+                    },
+                ],
+            },
+        ],
+    },
     adjudicator: {
         current: { type: mongoose_1.default.Schema.ObjectId, required: true, ref: "User" },
         since: { type: String, default: (0, moment_1.default)().format() },
@@ -28,18 +43,6 @@ const champSchema = new mongoose_1.default.Schema({
         {
             result: { type: Number, required: true },
             points: { type: Number, required: true },
-        },
-    ],
-    points: [
-        {
-            player: { type: mongoose_1.default.Schema.ObjectId, required: true, ref: "User" },
-            points: { type: Number, required: true },
-            history: [
-                {
-                    round: { type: String, required: true },
-                    points: { type: Number, required: true },
-                },
-            ],
         },
     ],
     rulesAndRegs: {

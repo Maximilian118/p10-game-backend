@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const userResolvers_1 = __importDefault(require("./userResolvers"));
 const bucketResolvers_1 = __importDefault(require("./bucketResolvers"));
-const Resolvers = Object.assign(Object.assign({}, userResolvers_1.default), bucketResolvers_1.default);
+const badgeResolvers_1 = __importDefault(require("./badgeResolvers"));
+const Resolvers = Object.assign(Object.assign(Object.assign({}, userResolvers_1.default), bucketResolvers_1.default), badgeResolvers_1.default);
 exports.default = Resolvers;
 //# sourceMappingURL=resolvers.js.map

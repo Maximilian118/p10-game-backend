@@ -7,15 +7,6 @@ const userSchema = `
     guest: Boolean
   }
 
-  type Badge {
-    _id: ID!
-    user_id: ID!
-    url: String!
-    name: String!
-    rarity: Int!
-    created_at: String!
-  }
-
   type User {
     _id: ID!
     refresh_count: Int!

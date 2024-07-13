@@ -7,14 +7,17 @@ const graphql_1 = require("graphql");
 const userSchema_1 = __importDefault(require("./userSchema"));
 const bucketSchema_1 = __importDefault(require("./bucketSchema"));
 const champSchema_1 = __importDefault(require("./champSchema"));
+const badgeSchema_1 = __importDefault(require("./badgeSchema"));
 const Schema = (0, graphql_1.buildSchema)(`
   ${userSchema_1.default}
   ${bucketSchema_1.default}
   ${champSchema_1.default}
+  ${badgeSchema_1.default}
 
   type rootQuery {
     signS3(filename: String!): S3Payload!
     login(email: String!, password: String): User!
+    getBadgesByChamp(championship: String): Badges
   }
 
   type rootMutation {
@@ -25,6 +28,7 @@ const Schema = (0, graphql_1.buildSchema)(`
     updateEmail(email: String!): User!
     updatePassword(currentPass: String!, password: String!, passConfirm: String!): User!
     createChamp(champInput: champInput): Champ!
+    newBadge(badgeInput: badgeInput): Badge!
   }
 
   schema {
