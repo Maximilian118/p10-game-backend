@@ -29,6 +29,7 @@ const Schema = (0, graphql_1.buildSchema)(`
     updatePassword(currentPass: String!, password: String!, passConfirm: String!): User!
     createChamp(champInput: champInput): Champ!
     newBadge(badgeInput: badgeInput): Badge!
+    updateBadge(updateBadgeInput: updateBadgeInput): Badge!
   }
 
   schema {

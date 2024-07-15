@@ -30,6 +30,16 @@ const badgeSchema = `
     zoom: Int
     championship: String
   }
+
+  input updateBadgeInput {
+    _id: ID!
+    url: String
+    name: String
+    rarity: Int
+    awardedHow: String
+    awardedDesc: String
+    zoom: Int
+  }
 `;
 exports.default = badgeSchema;
 //# sourceMappingURL=badgeSchema.js.map

@@ -2,7 +2,21 @@ import { AuthRequest } from "../../middleware/auth"
 import Badge, { badgeType } from "../../models/badge"
 import User, { userTypeMongo } from "../../models/user"
 import { signTokens } from "../../shared/utility"
-import { badgeErrors, badgeNameErrors, userErrors } from "./resolverErrors"
+import { ObjectId } from "mongodb"
+import {
+  badgeAwardedDescErrors,
+  badgeAwardedHowErrors,
+  badgeChampErrors,
+  badgeDuplicateErrors,
+  badgeNameErrors,
+  badgeRarityErrors,
+  badgeURLErrors,
+  badgeZoomErrors,
+  throwError,
+  userErrors,
+} from "./resolverErrors"
+import moment from "moment"
+import badgeRewardOutcomes, { findDesc } from "../../shared/badgeOutcomes"
 
 const badgeResolvers = {
   newBadge: async (args: { badgeInput: badgeType }, req: AuthRequest): Promise<badgeType> => {
@@ -12,8 +26,14 @@ const badgeResolvers = {
 
       // Check for errors.
       userErrors(user)
+      badgeURLErrors(url)
       badgeNameErrors(name)
-      badgeErrors(args.badgeInput)
+      badgeAwardedHowErrors(awardedHow)
+      badgeAwardedDescErrors(awardedHow, awardedDesc)
+      badgeRarityErrors(rarity)
+      badgeZoomErrors(zoom)
+      badgeChampErrors(championship)
+      await badgeDuplicateErrors(args.badgeInput)
 
       // Create a new user DB object.
       const badge = new Badge(
@@ -44,7 +64,7 @@ const badgeResolvers = {
     }
   },
   getBadgesByChamp: async (
-    { championship }: { championship: string | null },
+    { championship }: { championship: ObjectId | null },
     req: AuthRequest,
   ): Promise<{
     array: badgeType[]
@@ -57,11 +77,58 @@ const badgeResolvers = {
       userErrors(user)
 
       // Find badges by championship value.
-      const badges = await Badge.find({ championship } as { championship: string }).exec()
+      const badges = await Badge.find({ championship } as { championship: ObjectId }).exec()
 
       // Return the new user with tokens.
       return {
         array: badges,
+        tokens: JSON.stringify(signTokens(user)),
+      }
+    } catch (err) {
+      throw err
+    }
+  },
+  updateBadge: async (
+    args: { updateBadgeInput: badgeType },
+    req: AuthRequest,
+  ): Promise<badgeType> => {
+    try {
+      const { _id, url, name, rarity, awardedHow, awardedDesc, zoom } = args.updateBadgeInput
+      const user = (await User.findById(req._id)) as userTypeMongo
+
+      // Check for errors.
+      userErrors(user)
+      badgeURLErrors(url)
+      badgeNameErrors(name)
+      badgeAwardedHowErrors(awardedHow)
+      badgeAwardedDescErrors(awardedHow, awardedDesc)
+      badgeRarityErrors(rarity)
+      badgeZoomErrors(zoom)
+      await badgeDuplicateErrors(args.updateBadgeInput)
+
+      // Find a badge by _id.
+      const badge = await Badge.findById(_id)
+
+      if (!badge) {
+        throwError("updateBadge", badge, "No badge by that _id was found!")
+        return args.updateBadgeInput
+      }
+
+      // Mutate badge.
+      badge.url = url
+      badge.name = name
+      badge.rarity = rarity
+      badge.awardedHow = awardedHow
+      badge.awardedDesc = findDesc(badgeRewardOutcomes, awardedHow)
+      badge.zoom = zoom
+      badge.updated_at = moment().format()
+
+      // Save changes.
+      await badge.save()
+
+      // Return the new user with tokens.
+      return {
+        ...badge._doc,
         tokens: JSON.stringify(signTokens(user)),
       }
     } catch (err) {
