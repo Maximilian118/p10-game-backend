@@ -22,6 +22,8 @@ const badgeResolvers = {
             const { url, name, rarity, awardedHow, awardedDesc, zoom, championship } = args.badgeInput;
             const user = (yield user_1.default.findById(req._id));
             (0, resolverErrors_1.userErrors)(user);
+            (0, resolverErrors_1.badgeNameErrors)(name);
+            (0, resolverErrors_1.badgeErrors)(args.badgeInput);
             const badge = new badge_1.default({
                 url,
                 name,

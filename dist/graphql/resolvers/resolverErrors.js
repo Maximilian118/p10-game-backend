@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userErrors = exports.imageErrors = exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
+exports.badgeErrors = exports.badgeNameErrors = exports.userErrors = exports.imageErrors = exports.profilePictureErrors = exports.iconErrors = exports.passConfirmErrors = exports.passwordErrors = exports.emailErrors = exports.nameErrors = exports.throwError = void 0;
 const graphql_1 = require("graphql");
 const user_1 = __importDefault(require("../../models/user"));
+const badge_1 = __importDefault(require("../../models/badge"));
 const throwError = (type, value, message, code) => {
     throw new graphql_1.GraphQLError(JSON.stringify({
         type: type.toLowerCase(),
@@ -140,4 +141,41 @@ const userErrors = (user) => {
     }
 };
 exports.userErrors = userErrors;
+const badgeNameErrors = (badgeName) => {
+    const type = "badgeName";
+    if (!badgeName) {
+        (0, exports.throwError)(type, badgeName, "Please enter a name.");
+    }
+    if (!/^[a-zA-Z\s-']{1,15}$/.test(badgeName)) {
+        if (badgeName.length > 15) {
+            (0, exports.throwError)(type, badgeName, "15 characters maximum.");
+        }
+        (0, exports.throwError)(type, badgeName, "No numbers or special characters.");
+    }
+};
+exports.badgeNameErrors = badgeNameErrors;
+const badgeErrors = (badge) => __awaiter(void 0, void 0, void 0, function* () {
+    const type = "badge";
+    if (!badge.championship) {
+        (0, exports.throwError)(type, badge, "You must pass a championship.");
+    }
+    if (!badge.url) {
+        (0, exports.throwError)(type, badge, "You must pass an image URL.");
+    }
+    if (!badge.name) {
+        (0, exports.throwError)(type, badge, "Please enter a name.");
+    }
+    if (!badge.awardedHow) {
+        (0, exports.throwError)(type, badge, "Please enter how this badge should be earned.");
+    }
+    if (!badge.awardedDesc) {
+        (0, exports.throwError)(type, badge, "Please describe how this badge should be earned.");
+    }
+    if (!badge.rarity) {
+        (0, exports.throwError)(type, badge, "Please enter a rarity for the badge.");
+    }
+    const badges = yield badge_1.default.find({ championship: badge.championship }).exec();
+    console.log(badges);
+});
+exports.badgeErrors = badgeErrors;
 //# sourceMappingURL=resolverErrors.js.map

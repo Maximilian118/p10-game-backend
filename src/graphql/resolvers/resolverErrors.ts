@@ -1,5 +1,6 @@
 import { GraphQLError } from "graphql"
 import User, { userType } from "../../models/user"
+import Badge, { badgeType } from "../../models/badge"
 
 type punctuation = `${string}.` | `${string}!` | `${string}?`
 
@@ -167,4 +168,52 @@ export const userErrors = (user?: userType): void => {
   if (!user) {
     throwError(type, user, "Account not found!")
   }
+}
+
+export const badgeNameErrors = (badgeName: string): void => {
+  const type = "badgeName"
+
+  if (!badgeName) {
+    throwError(type, badgeName, "Please enter a name.")
+  }
+
+  if (!/^[a-zA-Z\s-']{1,15}$/.test(badgeName)) {
+    if (badgeName.length > 15) {
+      throwError(type, badgeName, "15 characters maximum.")
+    }
+
+    throwError(type, badgeName, "No numbers or special characters.")
+  }
+}
+
+export const badgeErrors = async (badge: badgeType): Promise<void> => {
+  const type = "badge"
+
+  if (!badge.championship) {
+    throwError(type, badge, "You must pass a championship.")
+  }
+
+  if (!badge.url) {
+    throwError(type, badge, "You must pass an image URL.")
+  }
+
+  if (!badge.name) {
+    throwError(type, badge, "Please enter a name.")
+  }
+
+  if (!badge.awardedHow) {
+    throwError(type, badge, "Please enter how this badge should be earned.")
+  }
+
+  if (!badge.awardedDesc) {
+    throwError(type, badge, "Please describe how this badge should be earned.")
+  }
+
+  if (!badge.rarity) {
+    throwError(type, badge, "Please enter a rarity for the badge.")
+  }
+
+  // Find badges by championship value and check for duplicates.
+  const badges = await Badge.find({ championship: badge.championship }).exec() // NEED TO FINISH.
+  console.log(badges)
 }

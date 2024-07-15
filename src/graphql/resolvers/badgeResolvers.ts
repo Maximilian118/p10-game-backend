@@ -2,8 +2,7 @@ import { AuthRequest } from "../../middleware/auth"
 import Badge, { badgeType } from "../../models/badge"
 import User, { userTypeMongo } from "../../models/user"
 import { signTokens } from "../../shared/utility"
-import { userErrors } from "./resolverErrors"
-// import { userErrors } from "./resolverErrors"
+import { badgeErrors, badgeNameErrors, userErrors } from "./resolverErrors"
 
 const badgeResolvers = {
   newBadge: async (args: { badgeInput: badgeType }, req: AuthRequest): Promise<badgeType> => {
@@ -13,6 +12,8 @@ const badgeResolvers = {
 
       // Check for errors.
       userErrors(user)
+      badgeNameErrors(name)
+      badgeErrors(args.badgeInput)
 
       // Create a new user DB object.
       const badge = new Badge(
