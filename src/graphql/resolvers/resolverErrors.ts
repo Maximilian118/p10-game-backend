@@ -179,7 +179,7 @@ export const badgeNameErrors = (badgeName: string): void => {
     throwError(type, badgeName, "Please enter a name.")
   }
 
-  if (badgeName.length > 30) {
+  if (badgeName.length >= 30) {
     throwError(type, badgeName, "30 characters maximum.")
   }
 }

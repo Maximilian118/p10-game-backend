@@ -170,7 +170,7 @@ const badgeNameErrors = (badgeName) => {
     if (!badgeName) {
         (0, exports.throwError)(type, badgeName, "Please enter a name.");
     }
-    if (badgeName.length > 30) {
+    if (badgeName.length >= 30) {
         (0, exports.throwError)(type, badgeName, "30 characters maximum.");
     }
 };
