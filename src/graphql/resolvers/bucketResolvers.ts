@@ -6,6 +6,7 @@ import { AuthRequest } from "../../middleware/auth"
 
 const bucketResolvers = {
   signS3: async ({ filename }: { filename: string }, req: AuthRequest) => {
+    // Not checking for req.auth because signS3 is used to upload create user image.
     try {
       await nameErrors(filename.split("/")[0])
       imageErrors("Resolver: signS3", filename)

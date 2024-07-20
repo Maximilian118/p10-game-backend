@@ -32,10 +32,7 @@ export const signTokens = (user: userType) => {
     { expiresIn: "7d" },
   )
 
-  return {
-    access_token,
-    refresh_token,
-  }
+  return [access_token, refresh_token]
 }
 
 // Hash a password.

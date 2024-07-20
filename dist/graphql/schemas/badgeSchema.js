@@ -13,12 +13,12 @@ const badgeSchema = `
     zoom: Int!
     created_at: String!
     updated_at: String!
-    tokens: String
+    tokens: [String!]
   }
   
   type Badges {
     array: [Badge!]!
-    tokens: String
+    tokens: [String!]
   }
 
   input badgeInput {

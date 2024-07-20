@@ -19,7 +19,7 @@ const userSchema = `
     created_at: String!
     updated_at: String!
     password: String
-    tokens: String
+    tokens: [String!]
   }
 
   input userInput {

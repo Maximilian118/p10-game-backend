@@ -1,7 +1,6 @@
 import { AuthRequest } from "../../middleware/auth"
 import Badge, { badgeType } from "../../models/badge"
 import User, { userTypeMongo } from "../../models/user"
-import { signTokens } from "../../shared/utility"
 import { ObjectId } from "mongodb"
 import {
   badgeAwardedDescErrors,
@@ -20,6 +19,10 @@ import badgeRewardOutcomes, { findDesc } from "../../shared/badgeOutcomes"
 
 const badgeResolvers = {
   newBadge: async (args: { badgeInput: badgeType }, req: AuthRequest): Promise<badgeType> => {
+    if (!req.isAuth) {
+      throwError("newBadge", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const { url, name, rarity, awardedHow, awardedDesc, zoom, championship } = args.badgeInput
       const user = (await User.findById(req._id)) as userTypeMongo
@@ -57,7 +60,7 @@ const badgeResolvers = {
       // Return the new user with tokens.
       return {
         ...badge._doc,
-        tokens: JSON.stringify(signTokens(user)),
+        tokens: req.tokens,
       }
     } catch (err) {
       throw err
@@ -68,8 +71,12 @@ const badgeResolvers = {
     req: AuthRequest,
   ): Promise<{
     array: badgeType[]
-    tokens: string
+    tokens: string[]
   }> => {
+    if (!req.isAuth) {
+      throwError("getBadgesByChamp", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const user = (await User.findById(req._id)) as userTypeMongo
 
@@ -82,7 +89,7 @@ const badgeResolvers = {
       // Return the new user with tokens.
       return {
         array: badges,
-        tokens: JSON.stringify(signTokens(user)),
+        tokens: req.tokens,
       }
     } catch (err) {
       throw err
@@ -92,6 +99,10 @@ const badgeResolvers = {
     args: { updateBadgeInput: badgeType },
     req: AuthRequest,
   ): Promise<badgeType> => {
+    if (!req.isAuth) {
+      throwError("updateBadge", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const { _id, url, name, rarity, awardedHow, awardedDesc, zoom } = args.updateBadgeInput
       const user = (await User.findById(req._id)) as userTypeMongo
@@ -129,7 +140,7 @@ const badgeResolvers = {
       // Return the new user with tokens.
       return {
         ...badge._doc,
-        tokens: JSON.stringify(signTokens(user)),
+        tokens: req.tokens,
       }
     } catch (err) {
       throw err

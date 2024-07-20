@@ -37,12 +37,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const badge_1 = __importDefault(require("../../models/badge"));
 const user_1 = __importDefault(require("../../models/user"));
-const utility_1 = require("../../shared/utility");
 const resolverErrors_1 = require("./resolverErrors");
 const moment_1 = __importDefault(require("moment"));
 const badgeOutcomes_1 = __importStar(require("../../shared/badgeOutcomes"));
 const badgeResolvers = {
     newBadge: (args, req) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("newBadge", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const { url, name, rarity, awardedHow, awardedDesc, zoom, championship } = args.badgeInput;
             const user = (yield user_1.default.findById(req._id));
@@ -68,20 +70,23 @@ const badgeResolvers = {
                     throw new Error(err);
             });
             yield badge.save();
-            return Object.assign(Object.assign({}, badge._doc), { tokens: JSON.stringify((0, utility_1.signTokens)(user)) });
+            return Object.assign(Object.assign({}, badge._doc), { tokens: req.tokens });
         }
         catch (err) {
             throw err;
         }
     }),
     getBadgesByChamp: (_a, req_1) => __awaiter(void 0, [_a, req_1], void 0, function* ({ championship }, req) {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("getBadgesByChamp", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const user = (yield user_1.default.findById(req._id));
             (0, resolverErrors_1.userErrors)(user);
             const badges = yield badge_1.default.find({ championship }).exec();
             return {
                 array: badges,
-                tokens: JSON.stringify((0, utility_1.signTokens)(user)),
+                tokens: req.tokens,
             };
         }
         catch (err) {
@@ -89,6 +94,9 @@ const badgeResolvers = {
         }
     }),
     updateBadge: (args, req) => __awaiter(void 0, void 0, void 0, function* () {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("updateBadge", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const { _id, url, name, rarity, awardedHow, awardedDesc, zoom } = args.updateBadgeInput;
             const user = (yield user_1.default.findById(req._id));
@@ -113,7 +121,7 @@ const badgeResolvers = {
             badge.zoom = zoom;
             badge.updated_at = (0, moment_1.default)().format();
             yield badge.save();
-            return Object.assign(Object.assign({}, badge._doc), { tokens: JSON.stringify((0, utility_1.signTokens)(user)) });
+            return Object.assign(Object.assign({}, badge._doc), { tokens: req.tokens });
         }
         catch (err) {
             throw err;

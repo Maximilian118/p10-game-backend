@@ -19,6 +19,7 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
     const accessTokenHeader = req.get("accessToken");
     const refreshTokenHeader = req.get("refreshToken");
     req.isAuth = false;
+    req.tokens = [];
     if (!accessTokenHeader && !refreshTokenHeader) {
         return next();
     }
@@ -34,7 +35,6 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
             res.status(401);
             return next();
         }
-        req.tokens = null;
         req.isAuth = true;
         req._id = verifiedToken._id;
         res.status(200);
@@ -68,7 +68,7 @@ const auth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(401);
         return next();
     }
-    req.tokens = JSON.stringify((0, utility_1.signTokens)(user));
+    req.tokens = (0, utility_1.signTokens)(user);
     req.isAuth = true;
     req._id = verifiedRefreshToken._id;
     res.status(200);

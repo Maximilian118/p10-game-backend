@@ -24,10 +24,7 @@ const signTokens = (user) => {
         _id: user._id,
         refresh_count: user.refresh_count,
     }, `${process.env.REFRESH_TOKEN_SECRET}`, { expiresIn: "7d" });
-    return {
-        access_token,
-        refresh_token,
-    };
+    return [access_token, refresh_token];
 };
 exports.signTokens = signTokens;
 const hashPass = (pass) => __awaiter(void 0, void 0, void 0, function* () {

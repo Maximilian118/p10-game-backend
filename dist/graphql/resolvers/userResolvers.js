@@ -39,7 +39,7 @@ const userResolvers = {
                     throw new Error(err);
             });
             yield user.save();
-            return Object.assign(Object.assign({}, user._doc), { tokens: JSON.stringify((0, utility_1.signTokens)(user)), password: null });
+            return Object.assign(Object.assign({}, user._doc), { tokens: (0, utility_1.signTokens)(user), password: null });
         }
         catch (err) {
             throw err;
@@ -57,7 +57,7 @@ const userResolvers = {
             }
             user.logged_in_at = (0, moment_1.default)().format();
             yield user.save();
-            return Object.assign(Object.assign({}, user._doc), { tokens: JSON.stringify((0, utility_1.signTokens)(user)), password: null });
+            return Object.assign(Object.assign({}, user._doc), { tokens: (0, utility_1.signTokens)(user), password: null });
         }
         catch (err) {
             throw err;
@@ -114,6 +114,9 @@ const userResolvers = {
         }
     }),
     updatePP: (_c, req_1) => __awaiter(void 0, [_c, req_1], void 0, function* ({ icon, profile_picture }, req) {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("updatePP", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const user = (yield user_1.default.findById(req._id));
             (0, resolverErrors_1.userErrors)(user);
@@ -128,6 +131,9 @@ const userResolvers = {
         }
     }),
     updateEmail: (_d, req_2) => __awaiter(void 0, [_d, req_2], void 0, function* ({ email }, req) {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("updateEmail", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const user = (yield user_1.default.findById(req._id));
             (0, resolverErrors_1.userErrors)(user);
@@ -142,6 +148,9 @@ const userResolvers = {
         }
     }),
     updateName: (_e, req_3) => __awaiter(void 0, [_e, req_3], void 0, function* ({ name }, req) {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("updateName", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const user = (yield user_1.default.findById(req._id));
             (0, resolverErrors_1.userErrors)(user);
@@ -156,6 +165,9 @@ const userResolvers = {
         }
     }),
     updatePassword: (_f, req_4) => __awaiter(void 0, [_f, req_4], void 0, function* ({ currentPass, password, passConfirm, }, req) {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("updatePassword", req.isAuth, "Not Authenticated!", 401);
+        }
         try {
             const user = (yield user_1.default.findById(req._id));
             (0, resolverErrors_1.userErrors)(user);

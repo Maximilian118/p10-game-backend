@@ -14,7 +14,7 @@ export interface badgeType {
   zoom: number
   created_at: string
   updated_at: string
-  tokens: string
+  tokens: string[]
   _doc: badgeType
 }
 

@@ -49,7 +49,7 @@ const userResolvers = {
       // Return the new user with tokens.
       return {
         ...user._doc,
-        tokens: JSON.stringify(signTokens(user)),
+        tokens: signTokens(user),
         password: null,
       }
     } catch (err) {
@@ -72,7 +72,7 @@ const userResolvers = {
 
       return {
         ...user._doc,
-        tokens: JSON.stringify(signTokens(user)),
+        tokens: signTokens(user),
         password: null,
       }
     } catch (err) {
@@ -140,6 +140,10 @@ const userResolvers = {
     { icon, profile_picture }: { icon: string; profile_picture: string },
     req: AuthRequest,
   ): Promise<userType> => {
+    if (!req.isAuth) {
+      throwError("updatePP", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const user = (await User.findById(req._id)) as userTypeMongo
       userErrors(user)
@@ -152,7 +156,7 @@ const userResolvers = {
 
       return {
         ...user._doc,
-        tokens: req.tokens as string,
+        tokens: req.tokens,
         password: null,
       }
     } catch (err) {
@@ -160,6 +164,10 @@ const userResolvers = {
     }
   },
   updateEmail: async ({ email }: { email: string }, req: AuthRequest): Promise<userType> => {
+    if (!req.isAuth) {
+      throwError("updateEmail", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const user = (await User.findById(req._id)) as userTypeMongo
       userErrors(user)
@@ -172,7 +180,7 @@ const userResolvers = {
 
       return {
         ...user._doc,
-        tokens: req.tokens as string,
+        tokens: req.tokens,
         password: null,
       }
     } catch (err) {
@@ -180,6 +188,10 @@ const userResolvers = {
     }
   },
   updateName: async ({ name }: { name: string }, req: AuthRequest): Promise<userType> => {
+    if (!req.isAuth) {
+      throwError("updateName", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const user = (await User.findById(req._id)) as userTypeMongo
       userErrors(user)
@@ -192,7 +204,7 @@ const userResolvers = {
 
       return {
         ...user._doc,
-        tokens: req.tokens as string,
+        tokens: req.tokens,
         password: null,
       }
     } catch (err) {
@@ -211,6 +223,10 @@ const userResolvers = {
     },
     req: AuthRequest,
   ): Promise<userType> => {
+    if (!req.isAuth) {
+      throwError("updatePassword", req.isAuth, "Not Authenticated!", 401)
+    }
+
     try {
       const user = (await User.findById(req._id)) as userTypeMongo
       userErrors(user)
@@ -264,7 +280,7 @@ const userResolvers = {
 
       return {
         ...user._doc,
-        tokens: req.tokens as string,
+        tokens: req.tokens,
         password: null,
       }
     } catch (err) {

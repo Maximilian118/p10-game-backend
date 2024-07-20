@@ -16,7 +16,7 @@ export interface ruleChangeType {
   voteExipiry: string
   created_at: string
   updated_at: string
-  tokens: string
+  tokens: string[]
   _doc: ruleChangeType
 }
 

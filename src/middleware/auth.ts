@@ -1,18 +1,19 @@
 import jwt, { JwtPayload } from "jsonwebtoken"
 import User from "../models/user"
 import { signTokens } from "../shared/utility"
-import { Request, RequestHandler } from "express"
+import { Request, Response, NextFunction } from "express"
 
 export interface AuthRequest extends Request {
+  tokens: string[]
   _id?: string
   isAuth?: boolean
-  tokens?: null | string
 }
 
-const auth: RequestHandler = async (req: AuthRequest, res, next): Promise<void> => {
+const auth = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   const accessTokenHeader = req.get("accessToken")
   const refreshTokenHeader = req.get("refreshToken")
   req.isAuth = false
+  req.tokens = []
 
   if (!accessTokenHeader && !refreshTokenHeader) {
     return next()
@@ -33,7 +34,6 @@ const auth: RequestHandler = async (req: AuthRequest, res, next): Promise<void> 
       return next()
     }
 
-    req.tokens = null
     req.isAuth = true
     req._id = verifiedToken._id
     res.status(200)
@@ -72,7 +72,7 @@ const auth: RequestHandler = async (req: AuthRequest, res, next): Promise<void> 
     return next()
   }
 
-  req.tokens = JSON.stringify(signTokens(user))
+  req.tokens = signTokens(user)
   req.isAuth = true
   req._id = verifiedRefreshToken._id
   res.status(200)

@@ -13,7 +13,6 @@ export interface userInputType {
 
 export interface userType extends userInputType {
   _id: ObjectId
-  tokens: string
   championships: object[]
   badges: {
     badge: ObjectId
@@ -28,6 +27,7 @@ export interface userType extends userInputType {
   logged_in_at: string
   created_at: string
   updated_at: string
+  tokens: string[]
   _doc: userType
 }
 

@@ -7,7 +7,7 @@ const champInput = `
     icon: String
     created_at: String!
     updated_at: String!
-    tokens: String
+    tokens: [String!]
   }
 
   input champInput {

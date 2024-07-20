@@ -21,7 +21,7 @@ app.use(express.json({ limit: "1mb" }))
 app.use(corsHandler)
 
 // Make token authentication middleware available in all reducers by passing req.
-app.use(auth)
+app.use(auth as any)
 
 // Initialise GraphQL.
 // Function takes a method to shape errors.
