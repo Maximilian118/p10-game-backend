@@ -3,17 +3,22 @@ import userSchema from "./userSchema"
 import bucketSchema from "./bucketSchema"
 import champSchema from "./champSchema"
 import badgeSchema from "./badgeSchema"
+import driverSchema from "./driverSchema"
+import driverGroupSchema from "./driverGroupSchema"
 
 const Schema = buildSchema(`
   ${userSchema}
   ${bucketSchema}
   ${champSchema}
   ${badgeSchema}
+  ${driverGroupSchema}
+  ${driverSchema}
 
   type rootQuery {
     signS3(filename: String!): S3Payload!
     login(email: String!, password: String): User!
     getBadgesByChamp(championship: String): Badges
+    getDriverGroups: DriverGroups 
   }
 
   type rootMutation {
@@ -26,6 +31,8 @@ const Schema = buildSchema(`
     createChamp(champInput: champInput): Champ!
     newBadge(badgeInput: badgeInput): Badge!
     updateBadge(updateBadgeInput: updateBadgeInput): Badge!
+    newDriverGroup(driverGroupInput: driverGroupInput): DriverGroup!
+    newDriver(driverInput: driverInput): Driver!
   }
 
   schema {

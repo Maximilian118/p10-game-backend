@@ -31,6 +31,7 @@ export interface champType {
     }[]
   }
   players: ObjectId[]
+  driverGroup: ObjectId[]
   pointsStructure: {
     result: number
     points: number
