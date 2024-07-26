@@ -37,6 +37,21 @@ const driverResolvers = {
             throw err;
         }
     }),
+    getDrivers: (_a, req_1) => __awaiter(void 0, [_a, req_1], void 0, function* ({}, req) {
+        if (!req.isAuth) {
+            (0, resolverErrors_1.throwError)("getDrivers", req.isAuth, "Not Authenticated!", 401);
+        }
+        try {
+            const drivers = yield driver_1.default.find().exec();
+            return {
+                array: drivers,
+                tokens: req.tokens,
+            };
+        }
+        catch (err) {
+            throw err;
+        }
+    }),
 };
 exports.default = driverResolvers;
 //# sourceMappingURL=driverResolvers.js.map

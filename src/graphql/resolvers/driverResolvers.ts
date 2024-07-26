@@ -12,6 +12,7 @@ const driverResolvers = {
       const { url, name, driverGroups, stats } = args.driverInput
 
       // Check for errors.
+      // NEW DRIVER HAS TO BELONG TO AT LEAST ONE DRIVERGROUP. CAN NOT BE NULL.
 
       // Create a new user DB object.
       const driver = new Driver(
@@ -32,6 +33,30 @@ const driverResolvers = {
       // Return the new user with tokens.
       return {
         ...driver._doc,
+        tokens: req.tokens,
+      }
+    } catch (err) {
+      throw err
+    }
+  },
+  getDrivers: async (
+    {},
+    req: AuthRequest,
+  ): Promise<{
+    array: driverType[]
+    tokens: string[]
+  }> => {
+    if (!req.isAuth) {
+      throwError("getDrivers", req.isAuth, "Not Authenticated!", 401)
+    }
+
+    try {
+      // Find all drivers.
+      const drivers = await Driver.find().exec()
+
+      // Return the new user with tokens.
+      return {
+        array: drivers,
         tokens: req.tokens,
       }
     } catch (err) {

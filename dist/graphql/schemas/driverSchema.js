@@ -20,6 +20,11 @@ const driverSchema = `
     tokens: [String!]
   }
 
+  type Drivers {
+    array: [Driver!]!
+    tokens: [String!]
+  }
+
   input statsInput {
     heightCM: Int!
     weightKG: Int!

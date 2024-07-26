@@ -18,7 +18,8 @@ const Schema = buildSchema(`
     signS3(filename: String!): S3Payload!
     login(email: String!, password: String): User!
     getBadgesByChamp(championship: String): Badges
-    getDriverGroups: DriverGroups 
+    getDriverGroups: DriverGroups
+    getDrivers: Drivers
   }
 
   type rootMutation {
