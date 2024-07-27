@@ -8,11 +8,12 @@ const moment_1 = __importDefault(require("moment"));
 const driverSchema = new mongoose_1.default.Schema({
     url: { type: String, required: true },
     name: { type: String, required: true },
+    driverID: { type: String, required: true },
     driverGroups: [{ type: mongoose_1.default.Schema.ObjectId, ref: "DriverGroup" }],
     stats: {
         heightCM: { type: Number, required: true },
         weightKG: { type: Number, required: true },
-        age: { type: Number, required: true },
+        birthday: { type: String, required: true },
         moustache: { type: Boolean, default: false },
         mullet: { type: Boolean, default: false },
     },
