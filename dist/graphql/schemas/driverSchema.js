@@ -13,7 +13,9 @@ const driverSchema = `
     _id: ID!
     url: String!
     name: String!
-    driverGroups: [String!]
+    driverID: String!
+    team: ID!
+    driverGroups: [ID!]
     stats: Stats!
     created_at: String!
     updated_at: String!
@@ -36,6 +38,8 @@ const driverSchema = `
   input driverInput {
     url: String!
     name: String!
+    driverID: String!
+    team: ID!
     driverGroups: [String!]
     stats: statsInput!
   }

@@ -3,8 +3,8 @@ const driverGroupSchema = `
     _id: ID!
     url: String!
     name: String!
-    championships: [String!]
-    drivers: [String!]
+    championships: [ID!]
+    drivers: [ID!]
     created_at: String!
     updated_at: String!
     tokens: [String!]
@@ -18,8 +18,8 @@ const driverGroupSchema = `
   input driverGroupInput {
     url: String!
     name: String!
-    championships: [String!]!
-    drivers: [String!]!
+    championships: [ID!]!
+    drivers: [ID!]!
   }
 `
 export default driverGroupSchema

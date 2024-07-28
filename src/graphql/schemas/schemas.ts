@@ -5,6 +5,7 @@ import champSchema from "./champSchema"
 import badgeSchema from "./badgeSchema"
 import driverSchema from "./driverSchema"
 import driverGroupSchema from "./driverGroupSchema"
+import teamSchema from "./teamSchema"
 
 const Schema = buildSchema(`
   ${userSchema}
@@ -13,6 +14,7 @@ const Schema = buildSchema(`
   ${badgeSchema}
   ${driverGroupSchema}
   ${driverSchema}
+  ${teamSchema}
 
   type rootQuery {
     signS3(filename: String!): S3Payload!
@@ -20,6 +22,7 @@ const Schema = buildSchema(`
     getBadgesByChamp(championship: String): Badges
     getDriverGroups: DriverGroups
     getDrivers: Drivers
+    getTeams: Teams
   }
 
   type rootMutation {
@@ -34,6 +37,7 @@ const Schema = buildSchema(`
     updateBadge(updateBadgeInput: updateBadgeInput): Badge!
     newDriverGroup(driverGroupInput: driverGroupInput): DriverGroup!
     newDriver(driverInput: driverInput): Driver!
+    newTeam(teamInput: teamInput): Team!
   }
 
   schema {

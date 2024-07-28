@@ -10,6 +10,7 @@ const champSchema_1 = __importDefault(require("./champSchema"));
 const badgeSchema_1 = __importDefault(require("./badgeSchema"));
 const driverSchema_1 = __importDefault(require("./driverSchema"));
 const driverGroupSchema_1 = __importDefault(require("./driverGroupSchema"));
+const teamSchema_1 = __importDefault(require("./teamSchema"));
 const Schema = (0, graphql_1.buildSchema)(`
   ${userSchema_1.default}
   ${bucketSchema_1.default}
@@ -17,6 +18,7 @@ const Schema = (0, graphql_1.buildSchema)(`
   ${badgeSchema_1.default}
   ${driverGroupSchema_1.default}
   ${driverSchema_1.default}
+  ${teamSchema_1.default}
 
   type rootQuery {
     signS3(filename: String!): S3Payload!
@@ -24,6 +26,7 @@ const Schema = (0, graphql_1.buildSchema)(`
     getBadgesByChamp(championship: String): Badges
     getDriverGroups: DriverGroups
     getDrivers: Drivers
+    getTeams: Teams
   }
 
   type rootMutation {
@@ -38,6 +41,7 @@ const Schema = (0, graphql_1.buildSchema)(`
     updateBadge(updateBadgeInput: updateBadgeInput): Badge!
     newDriverGroup(driverGroupInput: driverGroupInput): DriverGroup!
     newDriver(driverInput: driverInput): Driver!
+    newTeam(teamInput: teamInput): Team!
   }
 
   schema {

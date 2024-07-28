@@ -7,6 +7,7 @@ export interface driverType {
   url: string
   name: string
   driverID: `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}`
+  team: ObjectId
   driverGroups: ObjectId[]
   stats: {
     heightCM: number
@@ -25,6 +26,7 @@ const driverSchema = new mongoose.Schema<driverType>({
   url: { type: String, required: true }, // URL to an image in AWS S3.
   name: { type: String, required: true }, // Name of the driver.
   driverID: { type: String, required: true },
+  team: [{ type: mongoose.Schema.ObjectId, ref: "Team" }], // Teams that this driver currently races for.
   driverGroups: [{ type: mongoose.Schema.ObjectId, ref: "DriverGroup" }], // DriverGroups that this driver belongs to.
   stats: {
     // An object of stats for the driver.

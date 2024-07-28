@@ -1,1 +1,1 @@
-{"version":3,"file":"driverSchema.js","sourceRoot":"","sources":["../../../src/graphql/schemas/driverSchema.ts"],"names":[],"mappings":";;AAAA,MAAM,YAAY,GAAG;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CAuCpB,CAAA;AACD,kBAAe,YAAY,CAAA"}
+{"version":3,"file":"driverSchema.js","sourceRoot":"","sources":["../../../src/graphql/schemas/driverSchema.ts"],"names":[],"mappings":";;AAAA,MAAM,YAAY,GAAG;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;CA2CpB,CAAA;AACD,kBAAe,YAAY,CAAA"}
